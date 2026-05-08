@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FBF8F3;
+  --foreground: #1A1A1A;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  ::selection {
+    background-color: #1A1A1A;
+    color: #FBF8F3;
+  }
+
+  /* Hide scrollbars on horizontal carousels */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply text-[11px] uppercase tracking-widest2 text-ink-soft;
+  }
+
+  .link-underline {
+    @apply relative inline-block after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-bottom-right after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:ease-soft hover:after:origin-bottom-left hover:after:scale-x-100;
+  }
+
+  .btn-pill {
+    @apply inline-flex items-center justify-center rounded-full border border-ink/80 bg-transparent px-6 py-3 text-[12px] uppercase tracking-wider2 text-ink transition-colors duration-300 ease-soft hover:bg-ink hover:text-cream-50;
+  }
+
+  .btn-solid {
+    @apply inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-[12px] uppercase tracking-wider2 text-cream-50 transition-opacity duration-300 ease-soft hover:opacity-90;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
