@@ -1,7 +1,7 @@
 import type { Product } from '@/types/product';
 
 /**
- * Static product data — modeled after camillapihl.com.
+ * Static product data — modeled after playme-shop.com.
  * Images are hosted on Unsplash (royalty free).
  * Replace with your CMS / Shopify products in production.
  */

@@ -1,7 +1,28 @@
 import type { Metadata } from 'next';
 import { Inter, Cormorant_Garamond } from 'next/font/google';
+import { ThemeModeScript } from 'flowbite-react';
+import { ThemeInit } from '../../.flowbite-react/init';
 import { SITE_CONFIG } from '@/constants/site';
+import { PRIMARY_NAV } from '@/constants/nav';
+import { getMenu } from '@/lib/shopify';
+import type { NavLink } from '@/types/nav';
+import Navbar from '@/components/layout/navbar';
+import { Footer } from '@/components/layout/footer';
 import '@/styles/globals.css';
+
+async function getNavItems(): Promise<NavLink[]> {
+  try {
+    const menu = await getMenu('main-menu');
+    return menu.map((item) => ({
+      label: item.title,
+      href: item.path,
+    }));
+  } catch (error) {
+    console.error('Navbar menu fetch failed:', error);
+    return PRIMARY_NAV;
+  }
+}
+
 
 const inter = Inter({
   subsets: ['latin'],
@@ -42,15 +63,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const navItems = await getNavItems();
+
   return (
-    <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
-      <body className="bg-cream-50 text-ink antialiased">
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${cormorant.variable}`}>
+      <head>
+        <ThemeModeScript />
+      </head>
+
+      <body className="bg-cream-50 text-ink antialiased dark:bg-gray-900 dark:text-gray-100">
+        <ThemeInit />
+        <Navbar items={navItems} />
         {children}
+        <Footer />
       </body>
     </html>
   );

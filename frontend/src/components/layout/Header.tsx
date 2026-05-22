@@ -1,19 +1,38 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useRef, useState } from 'react';
-import { Search, User, Heart, ShoppingBag, Menu } from 'lucide-react';
-import { PRIMARY_NAV } from '@/constants/nav';
-import { cn } from '@/lib/utils';
-import { MegaMenu } from './MegaMenu';
-import { AnnouncementBar } from './AnnouncementBar';
-import type { MegaMenuKey } from '@/types/nav';
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import {
+  Search,
+  User,
+  Heart,
+  ShoppingBag,
+  Menu as MenuIcon,
+} from "lucide-react";
+import { DarkThemeToggle } from "flowbite-react";
+import { cn } from "@/lib/utils";
+import { MegaMenu } from "./MegaMenu";
+import { AnnouncementBar } from "./AnnouncementBar";
+import type { MegaMenuKey, NavLink } from "@/types/nav";
 
 const CLOSE_DELAY_MS = 140;
 
-export function Header() {
+type HeaderProps = {
+  items: NavLink[];
+};
+
+export function Header({ items }: HeaderProps) {
   const [openKey, setOpenKey] = useState<MegaMenuKey | null>(null);
+
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimer.current) {
+        clearTimeout(closeTimer.current);
+      }
+    };
+  }, []);
 
   const cancelClose = () => {
     if (closeTimer.current) {
@@ -24,7 +43,9 @@ export function Header() {
 
   const scheduleClose = () => {
     cancelClose();
-    closeTimer.current = setTimeout(() => setOpenKey(null), CLOSE_DELAY_MS);
+    closeTimer.current = setTimeout(() => {
+      setOpenKey(null);
+    }, CLOSE_DELAY_MS);
   };
 
   const openMenu = (key: MegaMenuKey) => {
@@ -49,16 +70,17 @@ export function Header() {
           <div className="container-page relative flex h-[72px] items-center justify-between gap-4">
             {/* Left — primary nav (desktop) */}
             <nav className="hidden items-center gap-7 lg:flex">
-              {PRIMARY_NAV.map((link) =>
+              {items.map((link) =>
                 link.megaMenu ? (
                   <button
                     key={link.href}
                     type="button"
-                    onMouseEnter={() => openMenu(link.megaMenu!)}
-                    onFocus={() => openMenu(link.megaMenu!)}
+                    onMouseEnter={() => openMenu(link.megaMenu as MegaMenuKey)}
+                    onFocus={() => openMenu(link.megaMenu as MegaMenuKey)}
                     className={cn(
-                      'link-underline text-[12px] uppercase tracking-wider2 text-ink',
-                      openKey === link.megaMenu && 'after:scale-x-100 after:origin-bottom-left',
+                      "link-underline text-[12px] uppercase tracking-wider2 text-ink",
+                      openKey === link.megaMenu &&
+                        "after:scale-x-100 after:origin-bottom-left",
                     )}
                   >
                     {link.label}
@@ -83,18 +105,29 @@ export function Header() {
               className="inline-flex items-center justify-center rounded-full p-2 text-ink lg:hidden"
               aria-label="Open menu"
             >
-              <Menu className="h-5 w-5" />
+              <MenuIcon className="h-5 w-5" />
             </button>
 
             {/* Center — wordmark */}
-            <Link
+            {/* <Link
               href="/"
               onMouseEnter={closeMenuImmediately}
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap font-serif text-[20px] tracking-[0.22em] text-ink lg:text-[22px]"
-              aria-label="Camilla Pihl — Home"
+              aria-label="Playme-shop — Home"
             >
-              CAMILLA&nbsp;PIHL
-            </Link>
+              PLAYME&nbsp;SHOP
+            </Link> */}
+            <Link
+                href={"/"}
+                prefetch={true}
+                onMouseEnter={closeMenuImmediately}
+                className="mx-2 flex w-full items-center justify-center md:w-auto lg:mx-6"
+              >
+                {/* <Logo /> */}
+                <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block">
+                  PLAYME&nbsp;SHOP
+                </div>
+              </Link>
 
             {/* Right — utilities */}
             <div className="flex items-center gap-1 sm:gap-2 lg:gap-3">
@@ -105,6 +138,8 @@ export function Header() {
               >
                 IN&nbsp;(USD)
               </button>
+              
+
               <button
                 type="button"
                 aria-label="Search"
@@ -112,6 +147,7 @@ export function Header() {
               >
                 <Search className="h-[18px] w-[18px]" strokeWidth={1.5} />
               </button>
+
               <button
                 type="button"
                 aria-label="Wishlist"
@@ -119,6 +155,7 @@ export function Header() {
               >
                 <Heart className="h-[18px] w-[18px]" strokeWidth={1.5} />
               </button>
+
               <button
                 type="button"
                 aria-label="Account"
@@ -126,6 +163,7 @@ export function Header() {
               >
                 <User className="h-[18px] w-[18px]" strokeWidth={1.5} />
               </button>
+
               <button
                 type="button"
                 aria-label="Cart"
@@ -136,6 +174,8 @@ export function Header() {
                   Cart&nbsp;(0)
                 </span>
               </button>
+
+              <DarkThemeToggle />
             </div>
           </div>
         </header>
