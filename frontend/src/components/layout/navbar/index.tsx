@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Suspense } from "react";
-import { Search as SearchIcon, User, Heart, ShoppingBag } from "lucide-react";
+import { Search as SearchIcon, User, Heart } from "lucide-react";
 import {
   DarkThemeToggle,
   MegaMenu,
@@ -17,6 +17,8 @@ import type { MegaMenuKey, NavLink } from "@/types/nav";
 import { AnnouncementBar } from "../AnnouncementBar";
 import Search, { SearchSkeleton } from "./search";
 import LogoSquare from "@/components/logo-square";
+import CartModal from "@/components/cart/modal";
+
 
 type NavbarProps = {
   items: NavLink[];
@@ -130,16 +132,7 @@ const Navbar = ({ items }: NavbarProps) => {
             <User className="h-[18px] w-[18px]" strokeWidth={1.5} />
           </button>
 
-          <button
-            type="button"
-            aria-label="Cart"
-            className="relative inline-flex items-center gap-1 rounded-full p-2 text-ink transition-colors hover:bg-ink/5"
-          >
-            <ShoppingBag className="h-[18px] w-[18px]" strokeWidth={1.5} />
-            <span className="hidden text-[11px] uppercase tracking-wider2 lg:inline">
-              Cart&nbsp;(0)
-            </span>
-          </button>
+          <CartModal />
         </div>
       </MegaMenu>
     </div>

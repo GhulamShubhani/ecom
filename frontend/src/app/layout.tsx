@@ -6,9 +6,14 @@ import { SITE_CONFIG } from '@/constants/site';
 import { PRIMARY_NAV } from '@/constants/nav';
 import { getMenu } from '@/lib/shopify';
 import type { NavLink } from '@/types/nav';
+import '@/styles/globals.css';
+
+
+import { CartProvider } from "@/components/cart/cart-context";
+import { cookies } from "next/headers";
+import { getCart } from "@/lib/shopify";
 import Navbar from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
-import '@/styles/globals.css';
 
 async function getNavItems(): Promise<NavLink[]> {
   try {
@@ -68,6 +73,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const cartId = cookieStore.get("cartId")?.value;
+  const cart = getCart(cartId);
   const navItems = await getNavItems();
 
   return (
@@ -78,9 +86,11 @@ export default async function RootLayout({
 
       <body className="bg-cream-50 text-ink antialiased dark:bg-gray-900 dark:text-gray-100">
         <ThemeInit />
-        <Navbar items={navItems} />
-        {children}
-        <Footer />
+        <CartProvider cartPromise={cart}>
+          <Navbar items={navItems} />
+          {children}
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );
