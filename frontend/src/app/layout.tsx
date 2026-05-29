@@ -13,15 +13,18 @@ import { CartProvider } from "@/components/cart/cart-context";
 import { cookies } from "next/headers";
 import { getCart } from "@/lib/shopify";
 import Navbar from '@/components/layout/navbar';
-import { Footer } from '@/components/layout/Footer';
+import { Footer } from '@/components/layout/footer';
 
 async function getNavItems(): Promise<NavLink[]> {
   try {
     const menu = await getMenu('main-menu');
-    return menu.map((item) => ({
+    const items = menu.map((item) => ({
       label: item.title,
       href: item.path,
     }));
+    // Ensure we always have a Home link even if Shopify menu omits it.
+    const hasHome = items.some((i) => i.href === '/');
+    return hasHome ? items : [{ label: 'Home', href: '/' }, ...items];
   } catch (error) {
     console.error('Navbar menu fetch failed:', error);
     return PRIMARY_NAV;

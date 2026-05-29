@@ -1,6 +1,7 @@
 import type { NavLink, MegaMenuContent, MegaMenuKey } from '@/types/nav';
 
 export const PRIMARY_NAV: NavLink[] = [
+  { label: 'Home',       href: '/' },
   { label: 'Shop',       href: '/shop',       megaMenu: 'shop' },
   { label: 'Pihl Denim', href: '/pihl-denim', megaMenu: 'pihl-denim' },
   { label: 'Curated',    href: '/curated' },

@@ -56,6 +56,7 @@ export default async function ProductPage({
   const { handle } = await params;
   const product = await getProduct(handle);
   if (!product) return notFound();
+  
   return (
     <ProductProvider>
       <div className="mx-auto max-w-screen-2xl px-4">
@@ -87,7 +88,7 @@ export default async function ProductPage({
 }
 
 async function RelatedPRoducts({ id }: { id: string }) {
-  const relatedProducts = await getProductRecommendations(id);
+  const relatedProducts = await getProductRecommendations(id);  
 
   if (!relatedProducts?.length) return null;
 

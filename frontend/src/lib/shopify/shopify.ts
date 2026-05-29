@@ -18,8 +18,6 @@ export async function shopifyFetch<T>(
   query: string,
   variables: Record<string, unknown> = {}
 ): Promise<T> {
-  console.log(query,"query");
-  console.log(variables,"variables");
   
   const response = await fetch(endpoint, {
     method: "POST",

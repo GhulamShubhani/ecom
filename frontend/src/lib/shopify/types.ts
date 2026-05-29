@@ -61,6 +61,7 @@ export type SEO = {
 export type ShopifyProduct = {
   id: string;
   handle: string;
+  vendor: string;
   availableForSale: boolean;
   title: string;
   description: string;

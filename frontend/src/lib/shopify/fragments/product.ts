@@ -5,6 +5,7 @@ export const productFragment = /* GraphQl */ `
     fragment product on Product {
     id
     handle
+    vendor
     availableForSale
     title
     description

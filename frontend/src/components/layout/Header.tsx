@@ -12,7 +12,7 @@ import {
 import { DarkThemeToggle } from "flowbite-react";
 import { cn } from "@/lib/utils";
 import { MegaMenu } from "./MegaMenu";
-import { AnnouncementBar } from "./AnnouncementBar";
+import  AnnouncementBar  from "./AnnouncementBar";
 import type { MegaMenuKey, NavLink } from "@/types/nav";
 
 const CLOSE_DELAY_MS = 140;
