@@ -13,7 +13,7 @@ import { CartProvider } from "@/components/cart/cart-context";
 import { cookies } from "next/headers";
 import { getCart } from "@/lib/shopify";
 import Navbar from '@/components/layout/navbar';
-import { Footer } from '@/components/layout/footer';
+import { Footer } from '@/components/layout/footer/Footer';
 
 async function getNavItems(): Promise<NavLink[]> {
   try {
