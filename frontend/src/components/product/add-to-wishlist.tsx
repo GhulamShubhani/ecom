@@ -26,7 +26,10 @@ type Props = {
 };
 
 export function AddToWishlist({ productHandle }: Props) {
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return getWishlist().includes(productHandle);
+  });
   const [mounted, setMounted] = useState(false);
 
   const syncFromStorage = useCallback(() => {
@@ -34,11 +37,19 @@ export function AddToWishlist({ productHandle }: Props) {
   }, [productHandle]);
 
   useEffect(() => {
-    setMounted(true);
-    syncFromStorage();
     window.addEventListener("wishlist-updated", syncFromStorage);
-    return () => window.removeEventListener("wishlist-updated", syncFromStorage);
+
+    return () => {
+      window.removeEventListener("wishlist-updated", syncFromStorage);
+    };
   }, [syncFromStorage]);
+
+  // useEffect(() => {
+  //   setMounted(true);
+  //   syncFromStorage();
+  //   window.addEventListener("wishlist-updated", syncFromStorage);
+  //   return () => window.removeEventListener("wishlist-updated", syncFromStorage);
+  // }, [syncFromStorage]);
 
   function toggleWishlist() {
     const list = getWishlist();
@@ -65,10 +76,11 @@ export function AddToWishlist({ productHandle }: Props) {
       <Heart
         className="h-5 w-5"
         strokeWidth={1.5}
-        fill={mounted && isWishlisted ? "currentColor" : "none"}
+        fill={isWishlisted ? "currentColor" : "none"}
       />
+
       <span className="hidden sm:inline">
-        {mounted && isWishlisted ? "Wishlisted" : "Wishlist"}
+        {isWishlisted ? "Wishlisted" : "Wishlist"}
       </span>
     </button>
   );

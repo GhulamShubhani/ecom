@@ -7,7 +7,7 @@ export default function BlogSection() {
     <section className={cn('bg-brand-black py-20')}>
       <div className="mx-auto max-w-6xl px-6">
         <h2 className="font-heading mb-4 text-center text-4xl text-white md:text-5xl">Get Inspired</h2>
-        <p className="mb-14 text-center text-gray-400">Tips, guides and honest advice for your intimate life.</p>
+        <p className="mb-14 text-center text-gray-400">Tips, guides and styling advice for dresses, clothing, belts, and bags.</p>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {BLOG_POSTS.map((post) => (
             <article
