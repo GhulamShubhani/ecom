@@ -46,8 +46,8 @@ export const sorting: SortFilterItem[] = [
   },
 ];
 
-export const HIDDEN_PRODUCT_TAG = "playme-hidden";
-// export const HIDDEN_PRODUCT_TAG = "playme-hidden";
+export const HIDDEN_PRODUCT_TAG = "apna-dukan-hidden";
+// export const HIDDEN_PRODUCT_TAG = "apna-dukan-hidden";
 export const DEFAULT_OPTION = "Default Title";
 
 const SHOPIFY_API_VERSION = process.env.SHOPIFY_API_VERSION || "2025-07";

@@ -1,10 +1,5 @@
 import type { Product } from '@/types/product';
 
-/**
- * Static product data — modeled after playme-shop.com.
- * Images are hosted on Unsplash (royalty free).
- * Replace with your CMS / Shopify products in production.
- */
 
 const STD_SIZES_F: Product['sizes'] = ['34', '36', '38', '40', '42', '44', '46'];
 const SHORT_SIZES: Product['sizes'] = ['34', '36', '38', '40', '42'];

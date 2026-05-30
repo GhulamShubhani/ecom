@@ -67,7 +67,7 @@ export function Footer() {
             ))}
           </div>
           <p className="text-center text-xs text-gray-600">
-            © 2025 VELVETLUX. All rights reserved. For adults 18+ only. All models 18+ at time of photography.
+            © 2025 APNADUKAN. All rights reserved. Designed for style, comfort, and everyday confidence.
           </p>
         </div>
       </div>
