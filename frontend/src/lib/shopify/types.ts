@@ -259,3 +259,21 @@ export type ShopifyPagesOperation = {
     pages: Connection<Page>;
   };
 };
+
+export type ShopContact = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  hours: string;
+};
+
+export type ShopInfoOperation = {
+  data: {
+    shop: {
+      name: string;
+      metafields: ({ key: string; value: string } | null)[];
+    };
+  };
+  variables: Record<string, never>;
+};

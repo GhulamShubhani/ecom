@@ -6,7 +6,7 @@ import {
 } from "../constants";
 import { isShopifyError } from "../type-guards";
 import { ensureStartWith } from "../utils";
-import { Menu, ShopifyMenuOperation } from "./types";
+import { Menu, ShopContact, ShopifyMenuOperation, ShopInfoOperation } from "./types";
 import {
   addToCartMutation,
   createCartMutation,
@@ -52,6 +52,7 @@ import {
 import { headers } from "next/headers";
 import { revalidateTag } from "next/cache";
 import { getPageQuery, getPagesQuery } from "./queries/page";
+import { getShopInfoQuery } from "./queries/contact";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
   ? ensureStartWith(process.env.SHOPIFY_STORE_DOMAIN, "https://")
@@ -167,6 +168,36 @@ function reshapeProducts(products: ShopifyProduct[]) {
   }
 
   return reshapedProducts;
+}
+
+
+
+export async function getShopContact(
+  fallback: ShopContact
+): Promise<ShopContact> {
+  try {
+    const res = await shopifyFetch<ShopInfoOperation>({
+      query: getShopInfoQuery,
+      tags: [TAGS.collections],
+    });
+    
+    const shop = res.body?.data?.shop;
+    const metafields = (shop?.metafields ?? []).filter(
+      (entry): entry is { key: string; value: string } => Boolean(entry?.value)
+    );
+    const values = Object.fromEntries(metafields.map((m) => [m.key, m.value]));
+
+    return {
+      name: shop?.name?.trim() || fallback.name,
+      email: values.email?.trim() || fallback.email,
+      phone: values.phone?.trim() || fallback.phone,
+      address: values.address?.trim() || fallback.address,
+      hours: values.hours?.trim() || fallback.hours,
+    };
+  } catch (error) {
+    console.error('getShopContact failed, using fallback:', error);
+    return fallback;
+  }
 }
 export async function getMenu(handle: string): Promise<Menu[]> {
   const res = await shopifyFetch<ShopifyMenuOperation>({
