@@ -28,6 +28,7 @@ async function getPopularProducts(): Promise<HomeProduct[]> {
         product.images?.[0]?.url ||
         'https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=1200&q=80',
       href: `/product/${product.handle}`,
+      variantId: product.variants?.length === 1 ? product.variants[0]?.id : product.variants?.[0]?.id,
     };
   });
 }

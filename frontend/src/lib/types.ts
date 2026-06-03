@@ -31,6 +31,8 @@ export interface Product {
   isBestseller: boolean;
   image: string;
   href: string;
+  /** Shopify variant ID — present when only one variant exists; enables direct add-to-cart from cards */
+  variantId?: string;
 }
 
 export interface BlogPost {
