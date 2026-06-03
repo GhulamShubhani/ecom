@@ -1,18 +1,20 @@
 import type { NavLink, MegaMenuContent, MegaMenuKey } from '@/types/nav';
 
 export const PRIMARY_NAV: NavLink[] = [
-  { label: 'Home',       href: '/' },
-  { label: 'Shop',       href: '/shop',       megaMenu: 'shop' },
-  { label: 'Pihl Denim', href: '/pihl-denim', megaMenu: 'pihl-denim' },
-  { label: 'Curated',    href: '/curated' },
-  { label: 'Jewelry',    href: '/jewelry' },
+  { label: 'Home',        href: '/' },
+  { label: 'Shop',        href: '/search' },
+  { label: 'New Arrivals', href: '/search?sort=latest-desc' },
+  { label: 'Brands',      href: '/search?q=brands' },
+  { label: 'Blog',        href: '/blog' },
+  { label: 'Contact',     href: '/contact' },
+  { label: 'About Us',    href: '/about-us' },
 ];
 
 export const ANNOUNCEMENTS = [
-  'Free shipping on all orders over 2000,- NOK within Scandinavia',
-  'New arrivals — SS26',
-  'Sign up for 10% off your first order',
-  'Designed in Oslo, made in Europe',
+  'Free Shipping on Orders Over $99',
+  'New Arrivals Every Week',
+  'Easy Returns & Exchanges',
+  'Get 15% Off Your First Order',
 ] as const;
 
 export const MEGA_MENU: Record<MegaMenuKey, MegaMenuContent> = {

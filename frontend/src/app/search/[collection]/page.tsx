@@ -15,11 +15,13 @@ export default async function CategoryPage({
   const { sort } = resolvedSearchParams as { [key: string]: string };
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
-  const products = await getCollectionProducts({
-    collection,
-    sortKey,
-    reverse,
-  });
+
+  let products: Awaited<ReturnType<typeof getCollectionProducts>> = [];
+  try {
+    products = await getCollectionProducts({ collection, sortKey, reverse });
+  } catch {
+    products = [];
+  }
 
   return (
     <section>

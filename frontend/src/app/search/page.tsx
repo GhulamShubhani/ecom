@@ -159,7 +159,13 @@ export default async function SearchPage({
 
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
-  const products = await getProducts({ sortKey, reverse, query: searchValue });
+
+  let products: Awaited<ReturnType<typeof getProducts>> = [];
+  try {
+    products = await getProducts({ sortKey, reverse, query: searchValue });
+  } catch {
+    products = [];
+  }
 
   return (
     <div>

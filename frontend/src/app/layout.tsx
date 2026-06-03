@@ -4,31 +4,13 @@ import { ThemeModeScript } from 'flowbite-react';
 import { ThemeInit } from '../../.flowbite-react/init';
 import { SITE_CONFIG } from '@/constants/site';
 import { PRIMARY_NAV } from '@/constants/nav';
-import { getMenu } from '@/lib/shopify';
-import type { NavLink } from '@/types/nav';
 import '@/styles/globals.css';
-
 
 import { CartProvider } from "@/components/cart/cart-context";
 import { cookies } from "next/headers";
 import { getCart } from "@/lib/shopify";
 import Navbar from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer/Footer';
-
-async function getNavItems(): Promise<NavLink[]> {
-  try {
-    const menu = await getMenu('main-menu');
-    const items = menu.map((item) => ({
-      label: item.title,
-      href: item.path,
-    }));
-    // Ensure we always have a Home link even if Shopify menu omits it.
-    const hasHome = items.some((i) => i.href === '/');
-    return hasHome ? items : [{ label: 'Home', href: '/' }, ...items];
-  } catch {
-    return PRIMARY_NAV;
-  }
-}
 
 
 const inter = Inter({
@@ -78,7 +60,6 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const cartId = cookieStore.get("cartId")?.value;
   const cart = getCart(cartId).catch(() => undefined);
-  const navItems = await getNavItems();
 
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${cormorant.variable}`}>
@@ -89,7 +70,7 @@ export default async function RootLayout({
       <body className="bg-[#0a0a0a] text-white antialiased">
         <ThemeInit />
         <CartProvider cartPromise={cart}>
-          <Navbar items={navItems} />
+          <Navbar items={PRIMARY_NAV} />
           {children}
           <Footer />
         </CartProvider>
