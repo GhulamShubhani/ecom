@@ -77,7 +77,7 @@ export default async function RootLayout({
 }) {
   const cookieStore = await cookies();
   const cartId = cookieStore.get("cartId")?.value;
-  const cart = getCart(cartId);
+  const cart = getCart(cartId).catch(() => undefined);
   const navItems = await getNavItems();
 
   return (

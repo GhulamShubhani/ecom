@@ -434,18 +434,22 @@ export async function getCart(
 ): Promise<Cart | undefined> {
   if (!cartId) return undefined;
 
-  const res = await shopifyFetch<ShopifyCartOperation>({
-    query: getCartQuery,
-    variables: { cartId },
-    tags: [TAGS.cart],
-  });
+  try {
+    const res = await shopifyFetch<ShopifyCartOperation>({
+      query: getCartQuery,
+      variables: { cartId },
+      tags: [TAGS.cart],
+    });
 
-  // old carts becomes 'null' when you checkout
-  if (!res.body.data.cart) {
+    // old carts becomes 'null' when you checkout
+    if (!res.body.data.cart) {
+      return undefined;
+    }
+
+    return reshapeCart(res.body.data.cart);
+  } catch {
     return undefined;
   }
-
-  return reshapeCart(res.body.data.cart);
 }
 
 export async function removeFromCart(
