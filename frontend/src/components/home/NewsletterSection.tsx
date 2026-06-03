@@ -39,10 +39,12 @@ export default function NewsletterSection() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               className="mb-3 w-full rounded-full border border-brand-gray bg-brand-black px-5 py-3 text-white placeholder:text-gray-500 transition focus:border-brand-red focus:outline-none"
+              suppressHydrationWarning
             />
             <button
               onClick={handleSubmit}
               className="w-full rounded-full bg-brand-red px-6 py-3 font-semibold tracking-wide text-white transition-all duration-300 hover:bg-brand-neon"
+              suppressHydrationWarning
             >
               Subscribe & Get 15% Off
             </button>

@@ -60,6 +60,7 @@ export default function Search() {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         className="w-full rounded-lg border border-ink/15 bg-white px-4 py-2 text-sm text-black placeholder:text-neutral-500 dark:border-neutral-800 dark:bg-transparent dark:text-white dark:placeholder:text-neutral-400"
+        suppressHydrationWarning
       />
       <div className="pointer-events-none absolute right-0 top-0 mr-3 flex h-full items-center text-ink-muted">
         <SearchIcon className="h-4 w-4" />
@@ -75,6 +76,7 @@ export function SearchSkeleton() {
         type="text"
         placeholder="Search for products..."
         className="w-full rounded-lg border border-ink/15 bg-white px-4 py-2 text-sm text-black placeholder:text-neutral-500 dark:border-neutral-800 dark:bg-transparent dark:text-white dark:placeholder:text-neutral-400"
+        suppressHydrationWarning
       />
       <div className="pointer-events-none absolute right-0 top-0 mr-3 flex h-full items-center text-ink-muted">
         <SearchIcon className="h-4 w-4" />

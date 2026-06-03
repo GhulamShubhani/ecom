@@ -25,8 +25,7 @@ async function getNavItems(): Promise<NavLink[]> {
     // Ensure we always have a Home link even if Shopify menu omits it.
     const hasHome = items.some((i) => i.href === '/');
     return hasHome ? items : [{ label: 'Home', href: '/' }, ...items];
-  } catch (error) {
-    console.error('Navbar menu fetch failed:', error);
+  } catch {
     return PRIMARY_NAV;
   }
 }

@@ -144,7 +144,7 @@ export async function createCartAndSetCookie() {
     const cart = await createCart();
     const cookieStore = await cookies();
     cookieStore.set("cartId", cart.id!);
-  } catch (error) {
-    console.error("createCartAndSetCookie failed:", error);
+  } catch {
+    // Shopify not available — cart will be created on first add-to-cart
   }
 }
