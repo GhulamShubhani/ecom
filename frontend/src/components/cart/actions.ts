@@ -127,18 +127,24 @@ export async function redirectToCheckout(_formData?: FormData): Promise<void> {
     return;
   }
 
-  const cart = await getCart(cartId);
-
-  if (!cart) {
-    console.error("redirectToCheckout: error fetching cart");
-    return;
+  try {
+    const cart = await getCart(cartId);
+    if (!cart) {
+      console.error("redirectToCheckout: error fetching cart");
+      return;
+    }
+    redirect(cart.checkoutUrl);
+  } catch (error) {
+    console.error("redirectToCheckout failed:", error);
   }
-
-  redirect(cart.checkoutUrl);
 }
 
 export async function createCartAndSetCookie() {
-  const cart = await createCart();
-  const cookieStore = await cookies();
-  cookieStore.set("cartId", cart.id!);
+  try {
+    const cart = await createCart();
+    const cookieStore = await cookies();
+    cookieStore.set("cartId", cart.id!);
+  } catch (error) {
+    console.error("createCartAndSetCookie failed:", error);
+  }
 }
