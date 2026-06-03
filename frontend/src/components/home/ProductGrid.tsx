@@ -4,10 +4,12 @@ import { cn } from '@/lib/utils';
 import ProductCard from './ProductCard';
 
 async function getPopularProducts(): Promise<HomeProduct[]> {
-  const storeProducts = await getProducts({
-    sortKey: 'BEST_SELLING',
-    reverse: false,
-  });
+  let storeProducts: Awaited<ReturnType<typeof getProducts>> = [];
+  try {
+    storeProducts = await getProducts({ sortKey: 'BEST_SELLING', reverse: false });
+  } catch {
+    return [];
+  }
 
   return storeProducts.slice(0, 8).map((product, index) => {
     const price = Number(product.priceRange.minVariantPrice.amount || 0);

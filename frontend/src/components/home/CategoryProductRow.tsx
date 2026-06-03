@@ -31,13 +31,12 @@ function mapToHomeProduct(product: Awaited<ReturnType<typeof getProducts>>[numbe
 
 // ── data fetcher — same as ProductGrid but filtered by query ───────────────
 async function getCategoryProducts(query: string): Promise<HomeProduct[]> {
-  const storeProducts = await getProducts({
-    sortKey: 'BEST_SELLING',
-    reverse: false,
-    query,          // e.g. "tag:for-her" or "for her"
-  });
-
-  return storeProducts.slice(0, 4).map(mapToHomeProduct);
+  try {
+    const storeProducts = await getProducts({ sortKey: 'BEST_SELLING', reverse: false, query });
+    return storeProducts.slice(0, 4).map(mapToHomeProduct);
+  } catch {
+    return [];
+  }
 }
 
 // ── component props ────────────────────────────────────────────────────────

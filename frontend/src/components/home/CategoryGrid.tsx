@@ -5,23 +5,30 @@ import { cn } from '@/lib/utils';
 const CATEGORY_EMOJIS = ['👗', '👜', '👒', '🛍️', '✨', '💎'];
 
 async function getCategoryTiles() {
-  const collections = await getCollections();
+  let collections: Awaited<ReturnType<typeof getCollections>> = [];
+  try {
+    collections = await getCollections();
+  } catch {
+    return [];
+  }
   const usableCollections = collections
     .filter((collection) => collection.handle && collection.title.toLowerCase() !== 'all')
     .slice(0, 6);
 
   const withCounts = await Promise.all(
     usableCollections.map(async (collection, index) => {
-      const products = await getCollectionProducts({
-        collection: collection.handle,
-        sortKey: 'BEST_SELLING',
-      });
-
+      let count = 0;
+      try {
+        const products = await getCollectionProducts({ collection: collection.handle, sortKey: 'BEST_SELLING' });
+        count = products.length;
+      } catch {
+        count = 0;
+      }
       return {
         id: collection.handle,
         name: collection.title,
         emoji: CATEGORY_EMOJIS[index] ?? '✨',
-        count: products.length,
+        count,
         href: collection.path,
       };
     })

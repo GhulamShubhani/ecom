@@ -4,17 +4,20 @@ import { cn } from '@/lib/utils';
 const FALLBACK_BRANDS = ['ZARA', 'H&M', 'MANGO', "LEVI'S", 'FOREVER 21', 'GUCCI', 'PRADA', 'FOSSIL', 'NIKE', 'ADIDAS', 'VERSACE', 'TOMMY HILFIGER'];
 
 async function getStoreBrands() {
-  const products = await getProducts({ sortKey: 'BEST_SELLING', reverse: false });
-  const uniqueVendors = Array.from(
-    new Set(
-      products
-        .map((product) => product.vendor?.trim())
-        .filter((vendor): vendor is string => Boolean(vendor))
-    )
-  );
-
-  const brands = uniqueVendors.length > 0 ? uniqueVendors.slice(0, 12) : FALLBACK_BRANDS;
-  return [...brands, ...brands];
+  try {
+    const products = await getProducts({ sortKey: 'BEST_SELLING', reverse: false });
+    const uniqueVendors = Array.from(
+      new Set(
+        products
+          .map((product) => product.vendor?.trim())
+          .filter((vendor): vendor is string => Boolean(vendor))
+      )
+    );
+    const brands = uniqueVendors.length > 0 ? uniqueVendors.slice(0, 12) : FALLBACK_BRANDS;
+    return [...brands, ...brands];
+  } catch {
+    return [...FALLBACK_BRANDS, ...FALLBACK_BRANDS];
+  }
 }
 
 export default async function BrandStrip() {
