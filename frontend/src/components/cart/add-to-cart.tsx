@@ -3,6 +3,7 @@
 import { Product, ProductVariant } from "@/lib/shopify/types";
 import { useProduct } from "../product/product-context";
 import { useCart } from "./cart-context";
+import { CartAddAnimation } from "./CartAddAnimation";
 import { startTransition, useActionState, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
@@ -20,17 +21,14 @@ function SubmitButton({
   selectedVariantId: string | undefined;
   state: ButtonState;
 }) {
-  const baseClasses =
+  const base =
     "relative flex w-full items-center justify-center gap-2 rounded-full p-4 text-sm font-semibold tracking-wide transition-all duration-300";
 
   if (!availableForSale) {
     return (
       <button
         disabled
-        className={clsx(
-          baseClasses,
-          "cursor-not-allowed border border-neutral-700 bg-neutral-900 text-neutral-500"
-        )}
+        className={clsx(base, "cursor-not-allowed border border-neutral-700 bg-neutral-900 text-neutral-500")}
       >
         Out of Stock
       </button>
@@ -42,10 +40,7 @@ function SubmitButton({
       <button
         aria-label="Please select an option"
         disabled
-        className={clsx(
-          baseClasses,
-          "cursor-not-allowed border border-neutral-700 bg-neutral-900 text-neutral-400 opacity-70"
-        )}
+        className={clsx(base, "cursor-not-allowed border border-neutral-700 bg-neutral-900 text-neutral-400 opacity-70")}
       >
         <ShoppingBag className="h-4 w-4" />
         Select an option
@@ -55,13 +50,7 @@ function SubmitButton({
 
   if (state === "loading") {
     return (
-      <button
-        disabled
-        className={clsx(
-          baseClasses,
-          "cursor-wait border border-neutral-700 bg-neutral-900 text-neutral-300"
-        )}
-      >
+      <button disabled className={clsx(base, "cursor-wait border border-neutral-700 bg-neutral-900 text-neutral-300")}>
         <span className="flex gap-1">
           <span className="h-1.5 w-1.5 animate-[blink_1.4s_both_infinite_0ms] rounded-full bg-current" />
           <span className="h-1.5 w-1.5 animate-[blink_1.4s_both_infinite_200ms] rounded-full bg-current" />
@@ -75,10 +64,7 @@ function SubmitButton({
     return (
       <button
         disabled
-        className={clsx(
-          baseClasses,
-          "animate-atc-bounce border border-green-500/40 bg-green-600/90 text-white"
-        )}
+        className={clsx(base, "animate-atc-bounce border border-green-500/40 bg-green-600/90 text-white")}
       >
         <Check className="animate-atc-check h-4 w-4" strokeWidth={2.5} />
         Added to Cart
@@ -89,10 +75,7 @@ function SubmitButton({
   return (
     <button
       aria-label="Add to cart"
-      className={clsx(
-        baseClasses,
-        "border border-brand-red bg-brand-red text-white hover:bg-[#b30000] hover:border-[#b30000]"
-      )}
+      className={clsx(base, "border border-brand-red bg-brand-red text-white hover:bg-[#b30000] hover:border-[#b30000]")}
     >
       <ShoppingBag className="h-4 w-4" />
       Add to Cart
@@ -107,10 +90,11 @@ export function AddToCart({ product }: { product: Product }) {
   const { state } = useProduct();
   const [message, addItemAction] = useActionState(addItem, null);
   const [buttonState, setButtonState] = useState<ButtonState>("idle");
-  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [showOverlay, setShowOverlay] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const variant = variants.find((variant: ProductVariant) =>
-    variant.selectedOptions.every(
+  const variant = variants.find((v: ProductVariant) =>
+    v.selectedOptions.every(
       (option) => option.value === state[option.name.toLowerCase()]
     )
   );
@@ -121,7 +105,7 @@ export function AddToCart({ product }: { product: Product }) {
   const handleAddToCart = async () => {
     if (!finalVariant || !selectedVariantId || buttonState !== "idle") return;
 
-    if (successTimerRef.current) clearTimeout(successTimerRef.current);
+    if (timerRef.current) clearTimeout(timerRef.current);
 
     setButtonState("loading");
 
@@ -131,27 +115,36 @@ export function AddToCart({ product }: { product: Product }) {
 
     await addItemAction(selectedVariantId);
 
+    /* Show both button-level and overlay animations */
     setButtonState("success");
+    setShowOverlay(true);
     openCart();
     router.refresh();
 
-    successTimerRef.current = setTimeout(() => {
+    /* Hide overlay after full animation (~1.7 s) */
+    timerRef.current = setTimeout(() => {
+      setShowOverlay(false);
       setButtonState("idle");
-    }, 1600);
+    }, 1750);
   };
 
   return (
-    <form action={handleAddToCart}>
-      <SubmitButton
-        availableForSale={availableForSale}
-        selectedVariantId={selectedVariantId}
-        state={buttonState}
-      />
-      {message && buttonState === "idle" ? (
-        <p className="mt-2 text-center text-sm text-red-400" role="alert">
-          {message}
-        </p>
-      ) : null}
-    </form>
+    <>
+      <form action={handleAddToCart}>
+        <SubmitButton
+          availableForSale={availableForSale}
+          selectedVariantId={selectedVariantId}
+          state={buttonState}
+        />
+        {message && buttonState === "idle" ? (
+          <p className="mt-2 text-center text-sm text-red-400" role="alert">
+            {message}
+          </p>
+        ) : null}
+      </form>
+
+      {/* Centered full-screen animation */}
+      <CartAddAnimation visible={showOverlay} />
+    </>
   );
 }
