@@ -87,7 +87,7 @@ export default async function RootLayout({
         <ThemeModeScript />
       </head>
 
-      <body className="bg-cream-50 text-ink antialiased dark:bg-gray-900 dark:text-gray-100">
+      <body className="bg-[#0a0a0a] text-white antialiased">
         <ThemeInit />
         <CartProvider cartPromise={cart}>
           <Navbar items={navItems} />

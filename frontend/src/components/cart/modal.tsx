@@ -308,7 +308,7 @@ export default function CartModal() {
               <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
                 <div className="flex items-center gap-2">
                   <ShoppingCart className="h-5 w-5 text-red-500" />
-                  <p className="text-lg font-semibold text-white">My Cart</p>
+                  <p className="text-lg font-semibold text-white">Your Bag</p>
                   {cart?.totalQuantity ? (
                     <span className="rounded-full bg-red-600 px-2 py-0.5 text-xs font-bold text-white">
                       {cart.totalQuantity}
@@ -327,17 +327,19 @@ export default function CartModal() {
 
               {/* Empty state */}
               {!cart || cart.lines.length === 0 ? (
-                <div className="flex flex-1 flex-col items-center justify-center gap-4">
+                <div className="flex flex-1 flex-col items-center justify-center gap-4 px-4 text-center">
                   <div className="flex h-20 w-20 items-center justify-center rounded-full border border-neutral-800 bg-neutral-900">
                     <ShoppingCart className="h-9 w-9 text-neutral-600" />
                   </div>
                   <p className="text-xl font-bold text-white">Your Cart is Empty</p>
-                  <p className="text-sm text-neutral-500">Add some products to get started.</p>
+                  <p className="text-sm text-neutral-400 max-w-[220px] leading-relaxed">
+                    Your next favourite look is waiting — start shopping.
+                  </p>
                   <button
                     onClick={closeCart}
-                    className="mt-2 rounded-full border border-red-600 px-6 py-2 text-sm text-red-500 transition hover:bg-red-600 hover:text-white"
+                    className="mt-2 rounded-full border border-brand-red px-6 py-2 text-sm font-medium text-brand-red transition hover:bg-brand-red hover:text-white"
                   >
-                    Continue Shopping
+                    Explore the Collection
                   </button>
                 </div>
               ) : (
@@ -490,7 +492,7 @@ function CheckoutButton() {
       type="submit"
       disabled={pending}
     >
-      {pending ? <LoadingDots className="bg-white" /> : "Proceed to Checkout →"}
+      {pending ? <LoadingDots className="bg-white" /> : "Complete Your Look →"}
     </button>
   );
 }

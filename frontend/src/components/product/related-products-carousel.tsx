@@ -59,7 +59,7 @@ export default function RelatedProductsCarousel({
         onClick={() => scrollByPage(-1)}
         aria-label="Previous related products"
         disabled={!canScrollLeft}
-        className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-ink/10 bg-white/90 p-2 text-ink shadow-sm backdrop-blur transition disabled:cursor-not-allowed disabled:opacity-0 dark:border-white/10 dark:bg-black/80 dark:text-white"
+        className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-neutral-700 bg-neutral-900/90 p-2 text-white shadow-sm backdrop-blur transition hover:border-brand-red hover:text-brand-red disabled:cursor-not-allowed disabled:opacity-0"
       >
         <ChevronLeft className="h-5 w-5" strokeWidth={1.5} />
       </button>
@@ -69,7 +69,7 @@ export default function RelatedProductsCarousel({
         onClick={() => scrollByPage(1)}
         aria-label="Next related products"
         disabled={!canScrollRight}
-        className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-ink/10 bg-white/90 p-2 text-ink shadow-sm backdrop-blur transition disabled:cursor-not-allowed disabled:opacity-0 dark:border-white/10 dark:bg-black/80 dark:text-white"
+        className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-neutral-700 bg-neutral-900/90 p-2 text-white shadow-sm backdrop-blur transition hover:border-brand-red hover:text-brand-red disabled:cursor-not-allowed disabled:opacity-0"
       >
         <ChevronRight className="h-5 w-5" strokeWidth={1.5} />
       </button>

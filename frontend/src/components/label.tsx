@@ -21,12 +21,12 @@ export default function Label({
         }
       )}
     >
-      <div className="flex items-center rounded-full border bg-white/70 p-1 text-xs font-semibold text-black backdrop-blur-md dark:border-neutral-800 dark:bg-black/70 dark:text-white">
+      <div className="flex items-center rounded-full border border-neutral-700 bg-[#0a0a0a]/80 p-1 text-xs font-semibold text-white backdrop-blur-md">
         <h3 className="mr-2 line-clamp-2 flex-grow pl-2 leading-none tracking-tight">
           {title}
         </h3>
         <Price
-          className="flex-none rounded-full bg-blue-600 p-2 text-white"
+          className="flex-none rounded-full bg-brand-red p-2 text-white"
           amount={amount}
           currencyCode={currencyCode}
           currencyCodeClassName="hidden src[275px]/label:inline"
