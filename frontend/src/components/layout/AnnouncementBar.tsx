@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 
 const tickerText =
-  '🚚 Discreet Delivery  •  🔥 Free Shipping Over $99  •  ✅ 100-Day Price Match  •  🔒 Anonymous Packaging  •  💳 Card, PayPal & BNPL  •';
+  '🚚 Free Shipping on Orders Over $99  •  🔥 New Arrivals Every Week  •  ✅ Easy Returns & Exchanges  •  👗 Dresses, Clothing, Belts & Bags  •  💳 Card, PayPal & BNPL Accepted  •  🎁 Get 15% Off Your First Order  •';
 
 export default function AnnouncementBar() {
   return (

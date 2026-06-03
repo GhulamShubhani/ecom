@@ -28,7 +28,7 @@ export default function NewsletterSection() {
         <p className="mb-3 text-xs tracking-[0.25em] text-brand-red uppercase">VIP ACCESS</p>
         <h2 className="font-heading mb-4 text-4xl text-white md:text-5xl">Get 15% Off Your First Order</h2>
         <p className="mb-8 text-sm text-gray-400">
-          Join our list for exclusive deals, early access & discreet updates. Unsubscribe anytime.
+          Join our list for exclusive deals, early access to new arrivals & style inspiration. Unsubscribe anytime.
         </p>
 
         {!submitted ? (
@@ -56,7 +56,7 @@ export default function NewsletterSection() {
 
         <p className="mt-6 inline-flex items-center gap-2 text-xs text-gray-600">
           <Lock className="h-3.5 w-3.5" />
-          We never share your data. Discreet emails only.
+          We never share your data. No spam, ever.
         </p>
       </div>
     </section>

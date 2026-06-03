@@ -1,7 +1,7 @@
 import { getProducts } from '@/lib/shopify';
 import { cn } from '@/lib/utils';
 
-const FALLBACK_BRANDS = ['WOMANIZER', 'LELO', 'WE-VIBE', 'FLESHLIGHT', 'SATISFYER', 'LOVENSE', 'ARCWAVE', 'TENGA'];
+const FALLBACK_BRANDS = ['ZARA', 'H&M', 'MANGO', "LEVI'S", 'FOREVER 21', 'GUCCI', 'PRADA', 'FOSSIL', 'NIKE', 'ADIDAS', 'VERSACE', 'TOMMY HILFIGER'];
 
 async function getStoreBrands() {
   const products = await getProducts({ sortKey: 'BEST_SELLING', reverse: false });

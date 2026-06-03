@@ -159,7 +159,7 @@ export default function Navbar({ items }: NavbarProps) {
             href="/"
             className="font-heading text-2xl tracking-wide text-white hover:text-brand-red transition-colors duration-300"
           >
-            APNA DUKAN
+            APNI DUKAN
           </Link>
 
           {/* Desktop nav — wrapped in Suspense for useSearchParams */}
@@ -209,7 +209,7 @@ export default function Navbar({ items }: NavbarProps) {
                 onClick={() => setMobileMenuOpen(false)}
                 className="font-heading text-xl text-white hover:text-brand-red transition-colors"
               >
-                APNA DUKAN
+                APNI DUKAN
               </Link>
               <button aria-label="Close menu" onClick={() => setMobileMenuOpen(false)}>
                 <X className="h-6 w-6 text-white" />

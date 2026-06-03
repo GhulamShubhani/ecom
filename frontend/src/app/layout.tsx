@@ -49,7 +49,7 @@ const cormorant = Cormorant_Garamond({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
   title: {
-    default: `${SITE_CONFIG.name} — Timeless silhouettes & soft tailoring`,
+    default: `${SITE_CONFIG.name} — Fashion for Every Occasion`,
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,

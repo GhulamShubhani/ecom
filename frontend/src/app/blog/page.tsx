@@ -4,7 +4,7 @@ import { BLOG_POSTS } from '@/lib/data';
 import { cn } from '@/lib/utils';
 
 export const metadata = {
-  title: 'Fashion Blog | VELVETLUX',
+  title: 'Fashion Blog | Apni Dukan',
   description:
     'Explore fashion tips, outfit guides, and styling inspiration for dresses, clothing, belts, and bags.',
 };

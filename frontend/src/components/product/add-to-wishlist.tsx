@@ -4,7 +4,7 @@ import { Heart } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 
-const WISHLIST_KEY = "apna-dukan-wishlist";
+const WISHLIST_KEY = "apni-dukan-wishlist";
 
 function getWishlist(): string[] {
   if (typeof window === "undefined") return [];

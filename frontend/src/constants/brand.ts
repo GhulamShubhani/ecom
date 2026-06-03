@@ -1,11 +1,11 @@
 export const BRAND = {
-  name: 'PLAY ME',
-  tagline: 'Pleasure, Perfected.',
+  name: 'Apni Dukan',
+  tagline: 'Style, Perfected.',
   description:
-    'Premium intimate essentials designed for confidence, comfort and unforgettable experiences.',
-  email: 'support@playme.shop',
-  phone: '+47 21 00 00 00',
-  address: 'Designed in Oslo · Shipped discreetly across Scandinavia',
+    'Premium fashion essentials designed for style, comfort, and everyday confidence.',
+  email: 'support@apnidukan.com',
+  phone: '+92 300 0000000',
+  address: 'Apni Dukan · Fashion for Every Occasion',
   social: {
     instagram: 'https://instagram.com/',
     youtube: 'https://youtube.com/',
@@ -20,10 +20,10 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     title: 'Shop',
     links: [
-      { label: 'For Her', href: '/for-her' },
-      { label: 'For Him', href: '/for-him' },
-      { label: 'For Couples', href: '/for-couples' },
-      { label: 'For Kink', href: '/for-kink' },
+      { label: 'Dresses', href: '/search?q=dresses' },
+      { label: 'Clothing', href: '/search?q=clothing' },
+      { label: 'Belts', href: '/search?q=belts' },
+      { label: 'Bags', href: '/search?q=bags' },
       { label: 'All Products', href: '/search' },
       { label: 'Bestsellers', href: '/search?sort=trending-desc' },
     ],
@@ -32,7 +32,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
     title: 'Help',
     links: [
       { label: 'Contact Us', href: '/contact' },
-      { label: 'Discreet Delivery', href: '/contact' },
+      { label: 'Shipping Info', href: '/contact' },
       { label: 'Returns & Refunds', href: '/contact' },
       { label: 'Track Order', href: '/search' },
       { label: 'FAQ', href: '/contact' },
@@ -44,7 +44,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       { label: 'About Us', href: '/about-us' },
       { label: 'Privacy Policy', href: '/privacy-policy' },
       { label: 'Terms & Conditions', href: '/terms' },
-      { label: 'Blog', href: '/search' },
+      { label: 'Blog', href: '/blog' },
     ],
   },
 ];

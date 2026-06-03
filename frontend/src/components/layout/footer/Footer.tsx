@@ -55,7 +55,7 @@ export function Footer() {
         <div className="mb-14 grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-4">
           <div>
             <Link href="/" className="font-heading mb-3 block text-2xl text-white">
-              APNA DUKAN
+              APNI DUKAN
             </Link>
 
             <p className="mb-5 text-sm leading-relaxed text-gray-500">
@@ -144,7 +144,7 @@ export function Footer() {
           </div>
 
           <p className="text-center text-xs text-gray-600">
-            © 2025 APNA DUKAN. All rights reserved. Designed for style, comfort, and everyday confidence.
+            © 2025 APNI DUKAN. All rights reserved. Designed for style, comfort, and everyday confidence.
           </p>
         </div>
       </div>

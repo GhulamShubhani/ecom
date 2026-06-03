@@ -129,7 +129,7 @@ export default function ContactForm() {
             id="phone"
             label="Phone"
             type="tel"
-            placeholder="+47 ..."
+            placeholder="+92 300 0000000"
             icon={Phone}
             autoComplete="tel"
             optional
@@ -180,7 +180,7 @@ export default function ContactForm() {
         </button>
 
         <p className="text-center text-xs text-gray-600">
-          We reply within 24 hours. Your details stay private and discreet.
+          We reply within 24 hours. Your details are always kept private.
         </p>
       </form>
     </div>

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getCollectionProducts, getCollections } from '@/lib/shopify';
 import { cn } from '@/lib/utils';
 
-const CATEGORY_EMOJIS = ['💜', '⚡', '💑', '🌙', '✨', '🏆'];
+const CATEGORY_EMOJIS = ['👗', '👜', '👒', '🛍️', '✨', '💎'];
 
 async function getCategoryTiles() {
   const collections = await getCollections();

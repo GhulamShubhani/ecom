@@ -1,26 +1,26 @@
-import Image from "next/image";
-
 export default function LogoIcon(props: React.ComponentProps<"svg">) {
   return (
-   <svg
+    <svg
       xmlns="http://www.w3.org/2000/svg"
       width="100%"
-      viewBox="0 0 496 160"
+      viewBox="0 0 560 160"
       fill="none"
+      {...props}
     >
-
-      <path d="M61 53 L61 107 L105 80 Z" fill="#ffffff" />
+      {/* Dress icon */}
+      <path d="M60 40 L40 80 L52 80 L48 120 L72 120 L68 80 L80 80 Z" fill="#CC0000" />
+      <circle cx="60" cy="30" r="10" fill="#CC0000" />
 
       <text
-        x="145"
-        y="94"
+        x="100"
+        y="102"
         fontFamily="Arial, Helvetica, sans-serif"
-        fontSize="74"
+        fontSize="68"
         fontWeight="900"
-        letterSpacing="6"
-        fill="#000000"
+        letterSpacing="4"
+        fill="#ffffff"
       >
-        PLAY ME
+        APNI DUKAN
       </text>
     </svg>
   );
