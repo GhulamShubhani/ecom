@@ -17,12 +17,12 @@ export default async function Home() {
       {/* <CategoryGrid /> */}
       <PromoSplitBanner />
       <div className="bg-brand-oatmilk">
-        <CategoryProductRow {...AUDIENCE_COLLECTIONS.forCouples} />
+        <CategoryProductRow {...AUDIENCE_COLLECTIONS.heroCouples} />
       </div>
       <ImageOverlayBanner />
       <div className="bg-brand-oatmilk">
-        <CategoryProductRow {...AUDIENCE_COLLECTIONS.forHer} />
-        <CategoryProductRow {...AUDIENCE_COLLECTIONS.forHim} />
+        <CategoryProductRow {...AUDIENCE_COLLECTIONS.heroHer} />
+        <CategoryProductRow {...AUDIENCE_COLLECTIONS.heroHim} />
         <CategoryProductRow {...AUDIENCE_COLLECTIONS.forKink} />
       </div>
       <SaleBanner />

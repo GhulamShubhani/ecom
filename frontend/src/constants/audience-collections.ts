@@ -26,8 +26,8 @@ export const AUDIENCE_COLLECTIONS: Record<
 > = {
   heroHer: {
     slug: 'hero-her',
-    handleCandidates: ['heroHenne'],
-    titleCandidates: ['heroHenne'],
+    handleCandidates: ['heroHer'],
+    titleCandidates: ['heroHer'],
     eyebrow: 'For Her',
     accentClass: 'text-brand-clay',
     gradientClass: 'from-brand-clay/40',
@@ -59,8 +59,8 @@ export const AUDIENCE_COLLECTIONS: Record<
   },
   heroHim: {
     slug: 'hero-him',
-    handleCandidates: ['heroHan'],
-    titleCandidates: ['heroHan'],
+    handleCandidates: ['heroHim'],
+    titleCandidates: ['heroHim'],
     eyebrow: 'For Him',
     accentClass: 'text-brand-champagne',
     gradientClass: 'from-brand-champagne/40',
@@ -82,8 +82,8 @@ export const AUDIENCE_COLLECTIONS: Record<
   },
   heroCouples: {
     slug: 'hero-couples',
-    handleCandidates: ['heroPar'],
-    titleCandidates: ['heroPar'],
+    handleCandidates: ['heroCouples'],
+    titleCandidates: ['heroCouples'],
     eyebrow: 'For Couples',
     accentClass: 'text-brand-burgundy',
     gradientClass: 'from-brand-burgundy/30',
