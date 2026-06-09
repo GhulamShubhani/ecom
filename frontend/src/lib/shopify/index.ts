@@ -6,7 +6,7 @@ import {
 } from "../constants";
 import { isShopifyError } from "../type-guards";
 import { ensureStartWith } from "../utils";
-import { Menu, ShopContact, ShopifyMenuOperation, ShopInfoOperation } from "./types";
+import {  ShopContact, ShopInfoOperation } from "./types";
 import {
   addToCartMutation,
   createCartMutation,
@@ -34,8 +34,8 @@ import {
   Image,
   ShopifyArticleOperation,
   ShopifyArticlesOperation,
-//   Menu,
-//   Page,
+  Menu,
+  Page,
   Product,
   ShopifyAddToCartOperation,
   ShopifyCart,
@@ -46,9 +46,9 @@ import {
   ShopifyCollectionsOperation,
   ShopifyProductFilter,
   ShopifyCreateCartOperation,
-//   ShopifyMenuOperation,
-//   ShopifyPageOperation,
-//   ShopifyPagesOperation,
+  ShopifyMenuOperation,
+  ShopifyPageOperation,
+  ShopifyPagesOperation,
   ShopifyProduct,
   ShopifyProductOperation,
   ShopifyProductRecommendationsOperation,
@@ -60,7 +60,7 @@ import { headers } from "next/headers";
 import { revalidateTag } from "next/cache";
 import { BRAND } from "@/constants/brand";
 import { getShopInfoQuery } from "./queries/contact";
-// import { getPageQuery, getPagesQuery } from "./queries/page";
+import { getPageQuery, getPagesQuery } from "./queries/page";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
   ? ensureStartWith(process.env.SHOPIFY_STORE_DOMAIN, "https://")
@@ -815,21 +815,21 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
 }
 
-// export async function getPage(handle: string): Promise<Page> {
-//   const res = await shopifyFetch<ShopifyPageOperation>({
-//     query: getPageQuery,
-//     cache: "no-store",
-//     variables: { handle },
-//   });
+export async function getPage(handle: string): Promise<Page> {
+  const res = await shopifyFetch<ShopifyPageOperation>({
+    query: getPageQuery,
+    cache: "no-store",
+    variables: { handle },
+  });
 
-//   return res.body.data.pageByHandle;
-// }
+  return res.body.data.pageByHandle;
+}
 
-// export async function getPages(): Promise<Page[]> {
-//   const res = await shopifyFetch<ShopifyPagesOperation>({
-//     query: getPagesQuery,
-//     cache: "no-store",
-//   });
+export async function getPages(): Promise<Page[]> {
+  const res = await shopifyFetch<ShopifyPagesOperation>({
+    query: getPagesQuery,
+    cache: "no-store",
+  });
 
-//   return removeEdgesAndNodes(res.body.data.pages);
-// }
+  return removeEdgesAndNodes(res.body.data.pages);
+}

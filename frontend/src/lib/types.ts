@@ -44,3 +44,12 @@ export interface Brand {
   id: string;
   name: string;
 }
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  slug: string;
+  category: string;
+}
