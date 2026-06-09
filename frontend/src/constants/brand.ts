@@ -1,11 +1,12 @@
 export const BRAND = {
   name: 'Apni Dukan',
-  tagline: 'Style, Perfected.',
+  tagline: 'Your shop, your style.',
+  microTagline: 'Fashion for everyone.',
   description:
-    'Premium fashion essentials designed for style, comfort, and everyday confidence.',
-  email: 'support@apnidukan.com',
-  phone: '+92 300 0000000',
-  address: 'Apni Dukan · Fashion for Every Occasion',
+    'Apni Dukan is your trusted online fashion store — curated clothing, footwear, accessories and everyday essentials with quality you can count on.',
+  email: 'support@apnidukan.in',
+  phone: '+91 98765 43210',
+  address: 'Mumbai, Maharashtra · Pan-India delivery',
   social: {
     instagram: 'https://instagram.com/',
     youtube: 'https://youtube.com/',
@@ -20,22 +21,22 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     title: 'Shop',
     links: [
-      { label: 'Dresses', href: '/search?q=dresses' },
-      { label: 'Clothing', href: '/search?q=clothing' },
-      { label: 'Belts', href: '/search?q=belts' },
-      { label: 'Bags', href: '/search?q=bags' },
+      { label: 'Women', href: '/for-her' },
+      { label: 'Men', href: '/for-him' },
+      { label: 'Dresses', href: '/for-couples' },
+      { label: 'New Arrivals', href: '/for-kink' },
       { label: 'All Products', href: '/search' },
-      { label: 'Bestsellers', href: '/search?sort=trending-desc' },
+      { label: 'Bestsellers', href: '/collections/bestsellers' },
     ],
   },
   {
     title: 'Help',
     links: [
       { label: 'Contact Us', href: '/contact' },
-      { label: 'Shipping Info', href: '/contact' },
-      { label: 'Returns & Refunds', href: '/contact' },
+      { label: 'Shipping & Delivery', href: '/contact' },
+      { label: 'Returns & Exchanges', href: '/contact' },
       { label: 'Track Order', href: '/search' },
-      { label: 'FAQ', href: '/contact' },
+      { label: 'Size Guide', href: '/contact' },
     ],
   },
   {
@@ -44,9 +45,8 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       { label: 'About Us', href: '/about-us' },
       { label: 'Privacy Policy', href: '/privacy-policy' },
       { label: 'Terms & Conditions', href: '/terms' },
-      { label: 'Blog', href: '/blog' },
     ],
   },
 ];
 
-export const PAYMENT_METHODS = ['Visa', 'Mastercard', 'PayPal', 'Klarna', 'BNPL'] as const;
+export const PAYMENT_METHODS = ['UPI', 'Visa', 'Mastercard', 'RuPay', 'COD', 'Net Banking'] as const;

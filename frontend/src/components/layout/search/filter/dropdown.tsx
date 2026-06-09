@@ -40,15 +40,15 @@ export default function FilterItemDropDown({ list }: { list: ListItem[] }) {
     <div className="relative" ref={ref}>
       <div
         onClick={() => setOpenSelect(!openSelect)}
-        className="flex w-full items-center justify-between rounded border border-black/30 px-4 py-2 text-sm dark:border-white/30"
+        className="flex w-full items-center justify-between rounded-full border border-brand-clay/30 bg-brand-sand px-4 py-2 font-jakarta text-sm text-brand-burgundy"
       >
         {active}
-        <ChevronDown  className="h-4" />
+        <ChevronDown  className="h-4 text-brand-clay" />
       </div>
       {openSelect && (
         <div
           onClick={() => setOpenSelect(false)}
-          className="absolute z-40 w-full rounded-b-md bg-white p-4 shadow-md dark:bg-black"
+          className="absolute z-40 mt-2 w-full rounded-3xl border border-brand-clay/15 bg-brand-oatmilk p-4 shadow-[0_25px_60px_-45px_rgba(74,21,37,0.6)]"
         >
           {list.map((item: ListItem, i) => (
             <FilterItem item={item} key={i} />

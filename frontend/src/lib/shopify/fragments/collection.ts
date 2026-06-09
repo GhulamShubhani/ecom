@@ -5,6 +5,24 @@ export const collectionFragment = /* GraphQL */ `
     handle
     title
     description
+    descriptionHtml
+    image {
+      url
+      altText
+      width
+      height
+    }
+    products(first: 1) {
+      filters {
+        id
+        label
+        values {
+          id
+          label
+          count
+        }
+      }
+    }
     seo {
       ...seo
     }

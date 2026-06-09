@@ -14,12 +14,19 @@ export const getProductsQuery = /* GraphQL */ `
     $sortKey: ProductSortKeys
     $reverse: Boolean
     $query: String
+    $first: Int = 250
+    $after: String
   ) {
-    products(sortKey: $sortKey, reverse: $reverse, query: $query, first: 100) {
+    products(sortKey: $sortKey, reverse: $reverse, query: $query, first: $first, after: $after) {
       edges {
+        cursor
         node {
           ...product
         }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
@@ -27,8 +34,11 @@ export const getProductsQuery = /* GraphQL */ `
 `;
 
 export const getProductRecommendationsQuery = /* GraphQL */ `
-  query getProductRecommendations($productId: ID!) {
-    productRecommendations(productId: $productId) {
+  query getProductRecommendations(
+    $productId: ID!
+    $intent: ProductRecommendationIntent
+  ) {
+    productRecommendations(productId: $productId, intent: $intent) {
       ...product
     }
   }

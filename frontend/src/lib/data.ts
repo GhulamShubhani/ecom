@@ -10,8 +10,10 @@ import type {
 
 export const HOME_NAV_LINKS: HomeNavLink[] = [
   { label: 'Shop', href: '/' },
-  { label: 'New Arrivals', href: '/search?sort=latest-desc' },
-  { label: 'Brands', href: '/search?q=brands' },
+  { label: 'Women', href: '/for-her' },
+  { label: 'Men', href: '/for-him' },
+  { label: 'Dresses', href: '/for-couples' },
+  { label: 'New Arrivals', href: '/for-kink' },
   { label: 'Contact', href: '/contact' },
   { label: 'About Us', href: '/about-us' },
 ];
@@ -19,23 +21,23 @@ export const HOME_NAV_LINKS: HomeNavLink[] = [
 export const TRUST_ITEMS: TrustItem[] = [
   {
     icon: Truck,
-    title: 'Fast Shipping',
-    description: 'Quick delivery on dresses, clothing, belts, and bags',
+    title: 'Fast Delivery',
+    description: 'Quick delivery on dresses, clothing, denim and accessories.',
   },
   {
     icon: Lock,
     title: 'Secure Shopping',
-    description: 'Safe checkout with protected payments',
+    description: 'Safe checkout with protected payments.',
   },
   {
     icon: CreditCard,
     title: 'Flexible Payment',
-    description: 'Pay easily with card, wallet, or online payment options',
+    description: 'Pay easily with card, wallet, or online payment options.',
   },
   {
     icon: RefreshCw,
     title: 'Easy Returns',
-    description: 'Simple return and exchange support on eligible products',
+    description: 'Simple return and exchange support on eligible items.',
   },
 ];
 

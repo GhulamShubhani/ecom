@@ -31,17 +31,13 @@ export interface Product {
   isBestseller: boolean;
   image: string;
   href: string;
-  /** Shopify variant ID — present when only one variant exists; enables direct add-to-cart from cards */
+  /** Product slug used for the /product/[handle] route. */
+  handle?: string;
+  /** First Shopify variant id — required to add the product to the cart. */
   variantId?: string;
-}
-
-export interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-  date: string;
-  slug: string;
-  category: string;
+  /** Currency for the price, used for the optimistic cart line. */
+  currencyCode?: string;
+  availableForSale?: boolean;
 }
 
 export interface Brand {

@@ -39,16 +39,36 @@ export const productFragment = /* GraphQl */ `
             amount
             currencyCode
           }
+          compareAtPrice {
+            amount
+            currencyCode
+          }
         }
       }
     }
     featuredImage {
       ...image
     }
-    images(first: 20) {
+    images(first: 250) {
       edges {
         node {
           ...image
+        }
+      }
+    }
+    collections(first: 250) {
+      edges {
+        node {
+          handle
+          title
+          description
+          image {
+            ...image
+          }
+          seo {
+            ...seo
+          }
+          updatedAt
         }
       }
     }

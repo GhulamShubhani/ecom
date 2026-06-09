@@ -16,7 +16,6 @@ export default function RelatedProductsCarousel({
   visibleCount = 4,
 }: Props) {
   const scrollerRef = useRef<HTMLUListElement>(null);
-  const [page, setPage] = useState(0);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
@@ -45,7 +44,6 @@ export default function RelatedProductsCarousel({
     const el = scrollerRef.current;
     if (!el) return;
     el.scrollBy({ left: el.clientWidth * direction, behavior: "smooth" });
-    setPage((p) => Math.max(0, p + direction));
   };
 
   if (!products.length) return null;
@@ -59,7 +57,7 @@ export default function RelatedProductsCarousel({
         onClick={() => scrollByPage(-1)}
         aria-label="Previous related products"
         disabled={!canScrollLeft}
-        className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-neutral-700 bg-neutral-900/90 p-2 text-white shadow-sm backdrop-blur transition hover:border-brand-red hover:text-brand-red disabled:cursor-not-allowed disabled:opacity-0"
+        className="absolute top-1/2 left-0 z-10 -translate-y-1/2 rounded-full border border-brand-clay/25 bg-white/90 p-2 text-brand-burgundy shadow-sm backdrop-blur transition hover:border-brand-clay hover:text-brand-clay disabled:cursor-not-allowed disabled:opacity-0"
       >
         <ChevronLeft className="h-5 w-5" strokeWidth={1.5} />
       </button>
@@ -69,14 +67,14 @@ export default function RelatedProductsCarousel({
         onClick={() => scrollByPage(1)}
         aria-label="Next related products"
         disabled={!canScrollRight}
-        className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-neutral-700 bg-neutral-900/90 p-2 text-white shadow-sm backdrop-blur transition hover:border-brand-red hover:text-brand-red disabled:cursor-not-allowed disabled:opacity-0"
+        className="absolute top-1/2 right-0 z-10 -translate-y-1/2 rounded-full border border-brand-clay/25 bg-white/90 p-2 text-brand-burgundy shadow-sm backdrop-blur transition hover:border-brand-clay hover:text-brand-clay disabled:cursor-not-allowed disabled:opacity-0"
       >
         <ChevronRight className="h-5 w-5" strokeWidth={1.5} />
       </button>
 
       <ul
         ref={scrollerRef}
-        className="no-scrollbar flex w-full snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pt-1"
+        className="no-scrollbar flex w-full snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pt-1"
       >
         {products.map((product) => (
           <li

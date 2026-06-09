@@ -17,13 +17,13 @@ function PathFilterItem({ item }: { item: PathFilterItem }) {
   newParams.delete("q");
 
   return (
-    <li className="mt-2 flex text-black dark:text-white" key={item.title}>
+    <li className="mt-2 flex text-brand-burgundy" key={item.title}>
       <DynamicTag
         href={createUrl(item.path, newParams)}
         className={clsx(
-          "w-full text-sm underline-offset-4 hover:underline dark:hover:text-neutral-100",
+          "w-full rounded-full px-3 py-2 font-jakarta text-sm text-brand-burgundy/65 transition-colors hover:bg-brand-sand hover:text-brand-burgundy",
           {
-            "underline underline-offset-4": active,
+            "bg-brand-burgundy text-brand-oatmilk hover:bg-brand-burgundy hover:text-brand-oatmilk": active,
           }
         )}
       >
@@ -50,14 +50,14 @@ function SortFilterItem({ item }: { item: SortFilterItem }) {
 
   return (
     <li
-      className="mt-2 flex text-sm text-black dark:text-white"
+      className="mt-2 flex text-sm text-brand-burgundy"
       key={item.title}
     >
       <DynamicTag
         prefetch={!active ? false : undefined}
         href={href}
-        className={clsx("w-full hover:underline hover:underline-offset-4", {
-          "underline underline-offset-4": active,
+        className={clsx("w-full rounded-full px-3 py-2 font-jakarta text-brand-burgundy/65 transition-colors hover:bg-brand-sand hover:text-brand-burgundy", {
+          "bg-brand-burgundy text-brand-oatmilk hover:bg-brand-burgundy hover:text-brand-oatmilk": active,
         })}
       >
         {item.title}

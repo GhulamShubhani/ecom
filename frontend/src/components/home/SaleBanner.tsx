@@ -41,9 +41,9 @@ function buildTimeLeft(targetDate: Date): TimeLeft {
 // Reusable countdown box to avoid repetition
 function TimeBox({ value, label }: { value: string; label: string }) {
   return (
-    <div className="min-w-[70px] rounded-xl bg-black/40 px-5 py-3 text-center">
-      <p className="font-mono text-4xl font-bold tabular-nums text-white">{value}</p>
-      <p className="mt-1 text-xs tracking-[0.2em] text-red-200 uppercase">{label}</p>
+    <div className="min-w-[70px] rounded-2xl border border-brand-champagne/25 bg-brand-oatmilk/10 px-5 py-3 text-center backdrop-blur">
+      <p className="font-cormorant text-4xl font-medium tabular-nums text-brand-oatmilk">{value}</p>
+      <p className="mt-1 font-jakarta text-[10px] font-semibold tracking-[0.28em] text-brand-champagne uppercase">{label}</p>
     </div>
   );
 }
@@ -57,9 +57,12 @@ export default function SaleBanner() {
 
   // ✅ Only runs on client — safe from hydration issues
   useEffect(() => {
-    const target = getNextSundayEnd();
-    setTargetDate(target);
-    setTimeLeft(buildTimeLeft(target));
+    const timer = window.setTimeout(() => {
+      const target = getNextSundayEnd();
+      setTargetDate(target);
+      setTimeLeft(buildTimeLeft(target));
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -86,16 +89,16 @@ export default function SaleBanner() {
   }, [targetDate]);
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-r from-brand-red via-red-800 to-brand-black px-6 py-16 text-center">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,23,68,0.15)_0%,transparent_70%)]" />
+    <section className="relative overflow-hidden bg-linear-to-br from-brand-burgundy via-[#2a0f16] to-brand-night px-6 py-20 text-center">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(211,179,143,0.16)_0%,transparent_70%)]" />
       <div className="relative z-10 mx-auto max-w-5xl">
-        <p className="mb-3 text-xs tracking-[0.3em] text-red-200 uppercase">
-          LIMITED TIME
+        <p className="mb-4 font-jakarta text-[11px] font-semibold tracking-[0.4em] text-brand-champagne uppercase">
+          Limited Campaign
         </p>
-        <h2 className="font-heading mb-4 text-4xl font-bold text-white md:text-6xl">
-          🔥 Flash Sale — Up to 40% Off
+        <h2 className="font-cormorant mb-5 text-5xl leading-tight font-medium text-brand-oatmilk md:text-7xl">
+          The Season Edit — Up to 40% Off
         </h2>
-        <p className="mb-8 text-lg text-red-100">
+        <p className="mb-9 font-jakarta text-lg text-brand-oatmilk/70">
           No code needed. Discount applied at checkout. Ends Sunday.
         </p>
 
@@ -117,13 +120,9 @@ export default function SaleBanner() {
 
         <Link
           href="/search?sort=trending-desc"
-          className={cn(
-            'rounded-full border border-white px-6 py-3 text-white',
-            'transition-all duration-300 ease-in-out',
-            'hover:bg-white hover:text-black'
-          )}
+          className={cn('btn-brand-outline')}
         >
-          Shop the Sale →
+          Shop the Campaign
         </Link>
       </div>
     </section>

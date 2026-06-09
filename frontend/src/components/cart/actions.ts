@@ -12,10 +12,51 @@ import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+export async function addItems(
+  prevState: unknown,
+  payload: { items: { selectedVariantId: string; quantity?: number }[] }
+) {
+  const items = payload.items.filter((item) => item.selectedVariantId);
+  if (!items.length) {
+    return "Error adding items to cart";
+  }
+
+  const cookieStore = await cookies();
+  let cartId = cookieStore.get("cartId")?.value;
+
+  try {
+    if (!cartId) {
+      const cart = await createCart();
+      cartId = cart.id!;
+      cookieStore.set("cartId", cartId);
+    }
+
+    await addToCart(
+      cartId,
+      items.map((item) => ({
+        merchandiseId: item.selectedVariantId,
+        quantity: item.quantity ?? 1,
+      }))
+    );
+    revalidateTag(TAGS.cart, "max");
+  } catch (error) {
+    console.error("addItems failed:", error);
+    return "Error adding items to cart";
+  }
+}
+
 export async function addItem(
   prevState: unknown,
-  selectedVariantId: string | undefined
+  payload:
+    | string
+    | undefined
+    | { selectedVariantId: string; quantity?: number }
 ) {
+  const selectedVariantId =
+    typeof payload === "string" ? payload : payload?.selectedVariantId;
+  const quantity =
+    typeof payload === "object" && payload?.quantity ? payload.quantity : 1;
+
   if (!selectedVariantId) {
     return "Error adding item to cart";
   }
@@ -31,7 +72,7 @@ export async function addItem(
     }
 
     await addToCart(cartId, [
-      { merchandiseId: selectedVariantId, quantity: 1 },
+      { merchandiseId: selectedVariantId, quantity },
     ]);
     revalidateTag(TAGS.cart, "max");
   } catch (error) {
@@ -41,7 +82,7 @@ export async function addItem(
 }
 
 export async function updateItemQuantity(
-  prevState: any,
+  prevState: unknown,
   payload: {
     merchandiseId: string;
     quantity: number;
@@ -89,7 +130,14 @@ export async function updateItemQuantity(
   }
 }
 
-export async function removeItem(prevState: any, merchandiseId: string) {
+export async function removeItem(
+  prevState: unknown,
+  payload: string | { merchandiseId: string; lineId?: string }
+) {
+  const merchandiseId =
+    typeof payload === "string" ? payload : payload.merchandiseId;
+  const lineId = typeof payload === "object" ? payload.lineId : undefined;
+
   const cookieStore = await cookies();
   const cartId = cookieStore.get("cartId")?.value;
 
@@ -103,22 +151,24 @@ export async function removeItem(prevState: any, merchandiseId: string) {
       return "Error fetching cart";
     }
 
-    const lineItem = cart.lines.find(
-      (line) => line.merchandise.id === merchandiseId
-    );
+    const lineItem =
+      (lineId ? cart.lines.find((line) => line.id === lineId) : undefined) ??
+      cart.lines.find((line) => line.merchandise.id === merchandiseId);
 
-    if (lineItem && lineItem.id) {
+    if (lineItem?.id) {
       await removeFromCart(cartId, [lineItem.id]);
       revalidateTag(TAGS.cart, "max");
-    } else {
-      return "Item not found in cart";
+      return;
     }
+
+    return "Item not found in cart";
   } catch (error) {
+    console.error("removeItem failed:", error);
     return "Error removing item from cart";
   }
 }
 
-export async function redirectToCheckout(_formData?: FormData): Promise<void> {
+export async function redirectToCheckout(): Promise<void> {
   const cookieStore = await cookies();
   const cartId = cookieStore.get("cartId")?.value;
 
@@ -127,24 +177,18 @@ export async function redirectToCheckout(_formData?: FormData): Promise<void> {
     return;
   }
 
-  try {
-    const cart = await getCart(cartId);
-    if (!cart) {
-      console.error("redirectToCheckout: error fetching cart");
-      return;
-    }
-    redirect(cart.checkoutUrl);
-  } catch (error) {
-    console.error("redirectToCheckout failed:", error);
+  const cart = await getCart(cartId);
+
+  if (!cart) {
+    console.error("redirectToCheckout: error fetching cart");
+    return;
   }
+
+  redirect(cart.checkoutUrl);
 }
 
 export async function createCartAndSetCookie() {
-  try {
-    const cart = await createCart();
-    const cookieStore = await cookies();
-    cookieStore.set("cartId", cart.id!);
-  } catch {
-    // Shopify not available — cart will be created on first add-to-cart
-  }
+  const cart = await createCart();
+  const cookieStore = await cookies();
+  cookieStore.set("cartId", cart.id!);
 }

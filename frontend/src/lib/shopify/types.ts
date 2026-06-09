@@ -30,10 +30,15 @@ export type ProductOption = {
 
 export type Edge<T> = {
   node: T;
+  cursor?: string;
 };
 
 export type Connection<T> = {
   edges: Array<Edge<T>>;
+  pageInfo?: {
+    hasNextPage: boolean;
+    endCursor: string | null;
+  };
 };
 
 export type ProductVariant = {
@@ -45,6 +50,14 @@ export type ProductVariant = {
     value: string;
   }[];
   price: Money;
+  compareAtPrice?: Money | null;
+};
+
+export type ProductMetafield = {
+  namespace: string;
+  key: string;
+  value: string;
+  type: string;
 };
 
 export type Image = {
@@ -74,14 +87,18 @@ export type ShopifyProduct = {
   variants: Connection<ProductVariant>;
   featuredImage: Image;
   images: Connection<Image>;
+  collections: Connection<ShopifyCollection>;
   seo: SEO;
   tags: string[];
   updatedAt: string;
+  metafields?: Connection<ProductMetafield>;
 };
 
-export type Product = Omit<ShopifyProduct, "variants" | "images"> & {
+export type Product = Omit<ShopifyProduct, "variants" | "images" | "collections" | "metafields"> & {
   variants: ProductVariant[];
   images: Image[];
+  collections: Collection[];
+  metafields: ProductMetafield[];
 };
 
 export type ShopifyProductsOperation = {
@@ -90,6 +107,8 @@ export type ShopifyProductsOperation = {
   };
   variables: {
     query?: string;
+    first?: number;
+    after?: string;
     reverse?: boolean;
     sortKey?: string;
   };
@@ -99,31 +118,73 @@ export type ShopifyCollection = {
   handle: string;
   title: string;
   description: string;
+  descriptionHtml: string;
+  image: Image | null;
+  products?: {
+    filters?: ShopifyProductFilter[];
+  };
   seo: SEO;
   updatedAt: string;
 };
 
 export type Collection = ShopifyCollection & {
   path: string;
+  productCount: number;
 };
 
 export type ShopifyCollectionsOperation = {
   data: {
     collections: Connection<ShopifyCollection>;
   };
+  variables: {
+    first?: number;
+    after?: string;
+  };
+};
+
+export type ShopifyCollectionOperation = {
+  data: {
+    collection: ShopifyCollection | null;
+  };
+  variables: {
+    handle: string;
+  };
 };
 
 export type ShopifyCollectionProductsOperation = {
   data: {
-    collection: {
-      products: Connection<ShopifyProduct>;
-    };
+    collection: ShopifyCollectionProducts | null;
   };
   variables: {
     handle: string;
+    first?: number;
+    after?: string;
     reverse?: boolean;
     sortKey?: string;
   };
+};
+
+export type ShopifyCollectionProducts = {
+  handle: string;
+  title: string;
+  description: string;
+  descriptionHtml: string;
+  image: Image | null;
+  seo: SEO;
+  updatedAt: string;
+  products: Connection<ShopifyProduct> & {
+    filters?: ShopifyProductFilter[];
+  };
+};
+
+export type ShopifyProductFilter = {
+  id: string;
+  label: string;
+  values: {
+    id: string;
+    label: string;
+    count: number;
+  }[];
 };
 
 export type ShopifyProductOperation = {
@@ -235,6 +296,7 @@ export type ShopifyProductRecommendationsOperation = {
   };
   variables: {
     productId: string;
+    intent?: "RELATED" | "COMPLEMENTARY";
   };
 };
 
@@ -257,6 +319,45 @@ export type ShopifyPageOperation = {
 export type ShopifyPagesOperation = {
   data: {
     pages: Connection<Page>;
+  };
+};
+
+export type Article = {
+  id: string;
+  handle: string;
+  title: string;
+  excerpt: string | null;
+  publishedAt: string;
+  tags: string[];
+  image: Image | null;
+  authorV2: { name: string } | null;
+  blog: { handle: string; title: string };
+  /** Only present on the detail query. */
+  contentHtml?: string;
+  seo?: SEO;
+};
+
+export type ShopifyArticlesOperation = {
+  data: {
+    articles: Connection<Article>;
+  };
+  variables: {
+    first: number;
+    sortKey?: string;
+    reverse?: boolean;
+    query?: string;
+  };
+};
+
+export type ShopifyArticleOperation = {
+  data: {
+    blog: {
+      articleByHandle: Article | null;
+    } | null;
+  };
+  variables: {
+    blogHandle: string;
+    articleHandle: string;
   };
 };
 

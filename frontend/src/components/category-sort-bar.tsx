@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type CategorySortBarProps = {
   count: number;
+  loadedCount?: number;
   currentSort: string;
 };
 
@@ -16,6 +17,7 @@ const sortOptions = [
 
 export default function CategorySortBar({
   count,
+  loadedCount,
   currentSort,
 }: CategorySortBarProps) {
   const router = useRouter();
@@ -37,23 +39,32 @@ export default function CategorySortBar({
   };
 
   return (
-    <div className="sticky top-0 z-30 border-b border-neutral-800 bg-brand-charcoal/95 backdrop-blur md:top-16">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-6">
-        <p className="text-sm text-neutral-300">
-          Showing <span className="font-semibold text-white">{count}</span>{" "}
+    <div className="sticky top-[7.25rem] z-30 border-b border-brand-clay/15 bg-brand-oatmilk/90 backdrop-blur md:top-[7.25rem]">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
+        <p className="font-jakarta text-sm text-brand-burgundy/60">
+          Showing{" "}
+          <span className="font-semibold text-brand-burgundy">
+            {loadedCount ?? count}
+          </span>
+          {loadedCount != null && loadedCount < count ? (
+            <>
+              {" "}
+              of <span className="font-semibold text-brand-burgundy">{count}</span>
+            </>
+          ) : null}{" "}
           products
         </p>
 
         <select
           value={currentSort}
           onChange={(event) => handleSortChange(event.target.value)}
-          className="rounded-full border border-neutral-700 bg-brand-black px-4 py-2 text-sm text-white outline-none transition hover:border-neutral-500 focus:border-white"
+          className="rounded-full border border-brand-clay/30 bg-brand-sand px-4 py-2 font-jakarta text-sm text-brand-burgundy outline-none transition hover:border-brand-clay focus:border-brand-clay"
         >
           {sortOptions.map((option) => (
             <option
               key={option.value}
               value={option.value}
-              className="bg-brand-black text-white"
+              className="bg-brand-oatmilk text-brand-burgundy"
             >
               {option.label}
             </option>

@@ -15,18 +15,23 @@ export default async function CategoryPage({
   const { sort } = resolvedSearchParams as { [key: string]: string };
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
-
-  let products: Awaited<ReturnType<typeof getCollectionProducts>> = [];
-  try {
-    products = await getCollectionProducts({ collection, sortKey, reverse });
-  } catch {
-    products = [];
-  }
+  const products = await getCollectionProducts({
+    collection,
+    sortKey,
+    reverse,
+  });
 
   return (
     <section>
       {products.length === 0 ? (
-        <p className="py-3 text-lg">{`No products found in this collection`}</p>
+        <div className="rounded-3xl border border-brand-clay/15 bg-white/70 p-12 text-center">
+          <h2 className="font-cormorant text-4xl font-medium text-brand-burgundy">
+            No products found
+          </h2>
+          <p className="mt-3 font-jakarta text-sm text-brand-burgundy/60">
+            This collection is being curated. Please check back soon.
+          </p>
+        </div>
       ) : (
         <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           <ProductGridItems products={products} />

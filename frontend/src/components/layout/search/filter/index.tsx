@@ -24,9 +24,9 @@ export default function FilterList({
 }) {
   return (
     <>
-      <nav>
+      <nav className="rounded-3xl border border-brand-clay/15 bg-white/60 p-4">
         {title ? (
-          <h3 className="hidden text-xs text-neutral-500 md:block dark:text-neutral-400">
+          <h3 className="hidden font-jakarta text-[11px] font-semibold tracking-[0.28em] text-brand-champagne uppercase md:block">
             {title}
           </h3>
         ) : null}

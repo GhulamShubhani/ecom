@@ -6,12 +6,15 @@ import {
   use,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useOptimistic,
+  useRef,
   useState,
 } from "react";
 
 type UpdateType = "plus" | "minus" | "delete";
+type CartToastType = "added" | "removed" | null;
 
 type CartContextType = {
   cart: Cart | undefined;
@@ -20,6 +23,12 @@ type CartContextType = {
   closeCart: () => void;
   updateCartItem: (merchandiseId: string, updateType: UpdateType) => void;
   addCartItem: (variant: ProductVariant, product: Product) => void;
+  cartToast: CartToastType;
+  showCartToast: (type: Exclude<CartToastType, null>) => void;
+  /** Increments each time something is added, used to replay the celebration overlay. */
+  addedAnimationKey: number;
+  /** Plays the centered "added to cart" animation. */
+  triggerAddedAnimation: () => void;
 };
 type CartAction =
   | {
@@ -206,9 +215,31 @@ export function CartProvider({
     cartReducer
   );
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [addedAnimationKey, setAddedAnimationKey] = useState(0);
+  const [cartToast, setCartToast] = useState<CartToastType>(null);
+  const cartToastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (cartToastTimerRef.current) {
+        clearTimeout(cartToastTimerRef.current);
+      }
+    };
+  }, []);
 
   const openCart = useCallback(() => setIsCartOpen(true), []);
   const closeCart = useCallback(() => setIsCartOpen(false), []);
+  const triggerAddedAnimation = useCallback(
+    () => setAddedAnimationKey((key) => key + 1),
+    []
+  );
+  const showCartToast = useCallback((type: Exclude<CartToastType, null>) => {
+    setCartToast(type);
+    if (cartToastTimerRef.current) {
+      clearTimeout(cartToastTimerRef.current);
+    }
+    cartToastTimerRef.current = setTimeout(() => setCartToast(null), 2200);
+  }, []);
 
   const updateCartItem = (merchandiseId: string, updateType: UpdateType) => {
     updateOptimisticCart({
@@ -229,8 +260,21 @@ export function CartProvider({
       closeCart,
       updateCartItem,
       addCartItem,
+      cartToast,
+      showCartToast,
+      addedAnimationKey,
+      triggerAddedAnimation,
     }),
-    [optimisticCart, isCartOpen, openCart, closeCart]
+    [
+      optimisticCart,
+      isCartOpen,
+      openCart,
+      closeCart,
+      cartToast,
+      showCartToast,
+      addedAnimationKey,
+      triggerAddedAnimation,
+    ]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

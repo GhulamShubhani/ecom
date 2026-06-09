@@ -225,14 +225,13 @@
 "use client";
 
 import { Dialog, Transition } from "@headlessui/react";
-import { ShoppingCart, X } from "lucide-react";
-import { Fragment, useEffect } from "react";
+import { Check, ShoppingCart, X } from "lucide-react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useCart } from "./cart-context";
-import { createUrl } from "@/lib/utils";
+import { cn, createUrl } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import Price from "../price";
-import CloseCart from "./close-cart";
 import { DEFAULT_OPTION } from "@/lib/constants";
 import { DeleteItemButton } from "./delete-item-button";
 import { EditItemQuantityButton } from "./edit-item-quantity-button";
@@ -244,15 +243,26 @@ type MerchandiseSearchParams = {
   [key: string]: string;
 };
 
-// ✅ Inline OpenCart so the icon is always white + shows red badge
-function OpenCart({ quantity }: { quantity?: number }) {
+// ✅ Inline OpenCart so the icon is always white + shows red badge.
+// `bump` increments on each add so the key change replays the CSS animation.
+function OpenCart({ quantity, bump }: { quantity?: number; bump: number }) {
   return (
-    <div className="relative flex h-11 w-11 items-center justify-center">
-      {/* White cart icon — visible on black navbar */}
-      <ShoppingCart className="h-6 w-6 text-white transition-colors hover:text-red-500" />
-      {/* Red quantity badge */}
+    <div data-cart-icon className="relative flex h-5 w-5 items-center justify-center">
+      <ShoppingCart
+        key={`cart-icon-${bump}`}
+        className={cn(
+          "h-5 w-5 transition-colors",
+          bump > 0 && "animate-cart-shake"
+        )}
+      />
       {quantity && quantity > 0 ? (
-        <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
+        <span
+          key={`cart-badge-${bump}`}
+          className={cn(
+            "absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-brand-champagne text-[10px] font-bold text-brand-night",
+            bump > 0 && "animate-cart-bounce"
+          )}
+        >
           {quantity > 99 ? "99+" : quantity}
         </span>
       ) : null}
@@ -261,7 +271,17 @@ function OpenCart({ quantity }: { quantity?: number }) {
 }
 
 export default function CartModal() {
-  const { cart, updateCartItem, isCartOpen, openCart, closeCart } = useCart();
+  const {
+    cart,
+    updateCartItem,
+    isCartOpen,
+    openCart,
+    closeCart,
+    cartToast,
+  } = useCart();
+
+  const [bump, setBump] = useState(0);
+  const prevQuantityRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!cart?.id) {
@@ -269,11 +289,66 @@ export default function CartModal() {
     }
   }, [cart?.id]);
 
+  const totalQuantity = cart?.totalQuantity ?? 0;
+
+  useEffect(() => {
+    if (prevQuantityRef.current === null) {
+      prevQuantityRef.current = totalQuantity;
+      return;
+    }
+
+    if (totalQuantity > prevQuantityRef.current && !isCartOpen) {
+      setBump((value) => value + 1);
+    }
+
+    prevQuantityRef.current = totalQuantity;
+  }, [totalQuantity, isCartOpen]);
+
   return (
     <>
+      {cartToast ? (
+        <div
+          role="status"
+          aria-live="polite"
+          className="animate-toast-in fixed right-6 bottom-6 z-[70] flex items-center gap-3 rounded-2xl border border-brand-clay/30 bg-brand-oatmilk/95 px-4 py-3 shadow-[0_20px_60px_-35px_rgba(74,21,37,0.75)] backdrop-blur"
+        >
+          <span
+            className={cn(
+              "flex h-8 w-8 items-center justify-center rounded-full",
+              cartToast === "added"
+                ? "bg-brand-burgundy text-brand-oatmilk"
+                : "bg-brand-sand text-brand-burgundy"
+            )}
+          >
+            {cartToast === "added" ? (
+              <Check className="h-4 w-4" />
+            ) : (
+              <X className="h-4 w-4" />
+            )}
+          </span>
+          <div className="pr-1">
+            <p className="font-jakarta text-sm font-semibold text-brand-burgundy">
+              {cartToast === "added" ? "Added to Bag" : "Removed from Bag"}
+            </p>
+            {cartToast === "added" ? (
+              <button
+                onClick={openCart}
+                className="font-jakarta text-xs text-brand-burgundy/55 transition hover:text-brand-clay"
+              >
+                View cart →
+              </button>
+            ) : (
+              <p className="font-jakarta text-xs text-brand-burgundy/55">
+                Item updated
+              </p>
+            )}
+          </div>
+        </div>
+      ) : null}
+
       {/* ✅ Cart trigger button */}
-      <button aria-label="Open cart" onClick={openCart}>
-        <OpenCart quantity={cart?.totalQuantity} />
+      <button aria-label="Open cart" onClick={openCart} className="nav-icon-btn">
+        <OpenCart quantity={cart?.totalQuantity} bump={bump} />
       </button>
 
       <Transition show={isCartOpen}>
@@ -289,10 +364,10 @@ export default function CartModal() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
+            <div className="fixed inset-0 bg-brand-night/45 backdrop-blur-sm" aria-hidden="true" />
           </Transition.Child>
 
-          {/* ✅ Cart panel — always dark, red accent border */}
+          {/* Cart panel */}
           <Transition.Child
             as={Fragment}
             enter="transition-all ease-in-out duration-300"
@@ -302,15 +377,15 @@ export default function CartModal() {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l-2 border-red-600/40 bg-[#0a0a0a] p-6 text-white md:w-[400px]">
+            <Dialog.Panel className="fixed top-0 right-0 bottom-0 flex h-full w-full flex-col border-l border-brand-clay/20 bg-brand-oatmilk p-6 text-brand-burgundy shadow-[-30px_0_90px_-60px_rgba(74,21,37,0.85)] md:w-[420px]">
 
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
+              <div className="flex items-center justify-between border-b border-brand-clay/20 pb-5">
                 <div className="flex items-center gap-2">
-                  <ShoppingCart className="h-5 w-5 text-red-500" />
-                  <p className="text-lg font-semibold text-white">Your Bag</p>
+                  <ShoppingCart className="h-5 w-5 text-brand-clay" />
+                  <p className="font-cormorant text-3xl font-medium text-brand-burgundy">Your Bag</p>
                   {cart?.totalQuantity ? (
-                    <span className="rounded-full bg-red-600 px-2 py-0.5 text-xs font-bold text-white">
+                    <span className="rounded-full bg-brand-champagne px-2 py-0.5 font-jakarta text-xs font-bold text-brand-night">
                       {cart.totalQuantity}
                     </span>
                   ) : null}
@@ -318,32 +393,39 @@ export default function CartModal() {
                 <button
                   aria-label="Close cart"
                   onClick={closeCart}
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-neutral-700 text-neutral-400 transition hover:border-red-500 hover:text-white"
+                  className="cart-close-btn"
                 >
-                  {/* ✅ Inline close — no dependency on CloseCart component color */}
-                  <X className="h-4 w-4" />
+                  <X className="h-4 w-4" strokeWidth={1.75} />
                 </button>
               </div>
 
               {/* Empty state */}
               {!cart || cart.lines.length === 0 ? (
-                <div className="flex flex-1 flex-col items-center justify-center gap-4 px-4 text-center">
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full border border-neutral-800 bg-neutral-900">
-                    <ShoppingCart className="h-9 w-9 text-neutral-600" />
+                <div className="cart-empty-state flex flex-1 flex-col items-center justify-center gap-4 text-center">
+                  <div className="animate-wellness-float relative flex h-20 w-20 items-center justify-center">
+                    <span
+                      aria-hidden
+                      className="animate-wellness-glow absolute inset-0 rounded-full bg-brand-champagne/25"
+                    />
+                    <div className="relative flex h-20 w-20 items-center justify-center rounded-full border border-brand-clay/20 bg-brand-sand">
+                      <ShoppingCart className="h-9 w-9 text-brand-clay" />
+                    </div>
                   </div>
-                  <p className="text-xl font-bold text-white">Your Cart is Empty</p>
-                  <p className="text-sm text-neutral-400 max-w-[220px] leading-relaxed">
-                    Your next favourite look is waiting — start shopping.
+                  <p className="cart-empty-item cart-empty-item-delay-1 font-cormorant text-3xl font-medium text-brand-burgundy">
+                    Your Bag is Empty
+                  </p>
+                  <p className="cart-empty-item cart-empty-item-delay-2 font-jakarta text-sm text-brand-burgundy/55">
+                    Begin with a considered wardrobe essential.
                   </p>
                   <button
                     onClick={closeCart}
-                    className="mt-2 rounded-full border border-brand-red px-6 py-2 text-sm font-medium text-brand-red transition hover:bg-brand-red hover:text-white"
+                    className="cart-empty-item cart-empty-item-delay-3 btn-brand-ghost mt-2"
                   >
-                    Explore the Collection
+                    Continue Shopping
                   </button>
                 </div>
               ) : (
-                <div className="flex h-full flex-col justify-between overflow-hidden">
+                <div className="cart-panel-body flex h-full flex-col justify-between overflow-hidden">
 
                   {/* Cart line items */}
                   <ul className="flex-grow overflow-auto py-4 pr-1">
@@ -370,12 +452,12 @@ export default function CartModal() {
                         return (
                           <li
                             key={i}
-                            className="flex w-full flex-col border-b border-neutral-800 py-4"
+                            className="flex w-full flex-col border-b border-brand-clay/15 py-5"
                           >
                             <div className="flex flex-row gap-3">
 
                               {/* Product image — ✅ squared, dark border */}
-                              <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-neutral-700 bg-neutral-900">
+                              <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl border border-brand-clay/20 bg-brand-sand">
                                 <Image
                                   className="h-full w-full object-cover"
                                   width={80}
@@ -395,11 +477,11 @@ export default function CartModal() {
                                   onClick={closeCart}
                                   className="group"
                                 >
-                                  <span className="text-sm font-medium leading-snug text-white group-hover:text-red-400 transition-colors">
+                                  <span className="font-cormorant text-xl font-medium leading-snug text-brand-burgundy transition-colors group-hover:text-brand-clay">
                                     {item.merchandise.product.title}
                                   </span>
                                   {item.merchandise.title !== DEFAULT_OPTION && (
-                                    <p className="mt-0.5 text-xs text-neutral-500">
+                                    <p className="mt-1 font-jakarta text-xs text-brand-burgundy/45">
                                       {item.merchandise.title}
                                     </p>
                                   )}
@@ -407,13 +489,13 @@ export default function CartModal() {
 
                                 <div className="flex items-center justify-between">
                                   {/* Quantity controls — ✅ dark rounded pill */}
-                                  <div className="flex h-8 flex-row items-center rounded-full border border-neutral-700 bg-neutral-900">
+                                  <div className="flex h-8 flex-row items-center rounded-full border border-brand-clay/25 bg-white">
                                     <EditItemQuantityButton
                                       item={item}
                                       type="minus"
                                       optimisticUpdate={updateCartItem}
                                     />
-                                    <p className="w-7 text-center text-sm text-white">
+                                    <p className="w-7 text-center font-jakarta text-sm text-brand-burgundy">
                                       {item.quantity}
                                     </p>
                                     <EditItemQuantityButton
@@ -424,7 +506,7 @@ export default function CartModal() {
                                   </div>
 
                                   <Price
-                                    className="text-sm font-semibold text-white"
+                                    className="font-jakarta text-sm font-semibold text-brand-burgundy"
                                     amount={item.cost.totalAmount.amount}
                                     currencyCode={item.cost.totalAmount.currencyCode}
                                   />
@@ -443,31 +525,30 @@ export default function CartModal() {
                   </ul>
 
                   {/* Totals + checkout */}
-                  <div className="border-t border-neutral-800 pt-4">
-                    <div className="space-y-2 text-sm text-neutral-400">
+                  <div className="border-t border-brand-clay/20 pt-5">
+                    <div className="space-y-3 font-jakarta text-sm text-brand-burgundy/60">
                       <div className="flex justify-between">
                         <span>Taxes</span>
                         <Price
-                          className="text-white"
+                          className="text-brand-burgundy"
                           amount={cart.cost.totalTaxAmount.amount}
                           currencyCode={cart.cost.totalTaxAmount.currencyCode}
                         />
                       </div>
                       <div className="flex justify-between">
                         <span>Shipping</span>
-                        <span className="text-neutral-400">Calculated at checkout</span>
+                        <span className="text-brand-burgundy/45">Calculated at checkout</span>
                       </div>
-                      <div className="flex justify-between border-t border-neutral-800 pt-2 text-base font-semibold text-white">
+                      <div className="flex justify-between border-t border-brand-clay/20 pt-3 text-base font-semibold text-brand-burgundy">
                         <span>Total</span>
                         <Price
-                          className="text-white"
+                          className="text-brand-burgundy"
                           amount={cart.cost.totalAmount.amount}
                           currencyCode={cart.cost.totalAmount.currencyCode}
                         />
                       </div>
                     </div>
 
-                    {/* ✅ Red checkout button */}
                     <form action={redirectToCheckout} className="mt-4">
                       <CheckoutButton />
                     </form>
@@ -488,11 +569,11 @@ function CheckoutButton() {
 
   return (
     <button
-      className="block w-full rounded-full bg-red-600 p-3 text-center text-sm font-semibold text-white transition hover:bg-red-500 disabled:opacity-60"
+      className="btn-brand block w-full disabled:opacity-60"
       type="submit"
       disabled={pending}
     >
-      {pending ? <LoadingDots className="bg-white" /> : "Complete Your Look →"}
+      {pending ? <LoadingDots className="bg-white" /> : "Proceed to Checkout →"}
     </button>
   );
 }

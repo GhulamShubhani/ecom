@@ -22,6 +22,19 @@ export function formatPrice(amount: number, currency: string = 'USD') {
 
 
 
+/**
+ * Format an ISO date string into a friendly, human-readable label.
+ */
+export function formatDate(value: string | Date) {
+  const date = typeof value === 'string' ? new Date(value) : value;
+  if (Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(date);
+}
+
 export function ensureStartWith(stringToCheck: string, startsWith: string) {
   return stringToCheck.startsWith(startsWith)
     ? stringToCheck

@@ -1,51 +1,72 @@
-import { getProducts } from '@/lib/shopify';
+import { MOST_LOVED_ESSENTIALS } from '@/constants/audience-collections';
+import { IMAGES } from '@/constants/images';
+import { resolveCollection } from '@/lib/resolve-collection';
+import { getCollectionProducts, getProducts } from '@/lib/shopify';
 import type { Product as HomeProduct } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import Prose from '@/components/prose';
 import ProductCard from './ProductCard';
 
-async function getPopularProducts(): Promise<HomeProduct[]> {
-  let storeProducts: Awaited<ReturnType<typeof getProducts>> = [];
-  try {
-    storeProducts = await getProducts({ sortKey: 'BEST_SELLING', reverse: false });
-  } catch {
-    return [];
-  }
+type StoreProduct = Awaited<ReturnType<typeof getCollectionProducts>>[number];
 
-  return storeProducts.slice(0, 8).map((product, index) => {
-    const price = Number(product.priceRange.minVariantPrice.amount || 0);
-    const compareAtPrice = index % 2 === 0 ? Math.round(price * 1.25) : undefined;
+function mapToHomeProduct(product: StoreProduct, index: number): HomeProduct {
+  const price = Number(product.priceRange.minVariantPrice.amount || 0);
+  const compareAtPrice = index % 2 === 0 ? Math.round(price * 1.25) : undefined;
 
-    return {
-      id: product.id,
-      name: product.title,
-      price,
-      originalPrice: compareAtPrice,
-      badge: 'BESTSELLER',
-      rating: 5,
-      reviewCount: 120 + index * 11,
-      category: 'Popular',
-      isBestseller: true,
-      image:
-        product.featuredImage?.url ||
-        product.images?.[0]?.url ||
-        'https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=1200&q=80',
-      href: `/product/${product.handle}`,
-      variantId: product.variants?.length === 1 ? product.variants[0]?.id : product.variants?.[0]?.id,
-    };
-  });
+  return {
+    id: product.id,
+    name: product.title,
+    price,
+    originalPrice: compareAtPrice,
+    badge: 'BESTSELLER',
+    rating: 5,
+    reviewCount: 120 + index * 11,
+    category: 'Popular',
+    isBestseller: true,
+    image:
+      product.featuredImage?.url ||
+      product.images?.[0]?.url ||
+      IMAGES.products.fallback,
+    href: `/product/${product.handle}`,
+    handle: product.handle,
+    variantId: product.variants?.[0]?.id,
+    currencyCode: product.priceRange.minVariantPrice.currencyCode,
+    availableForSale: product.availableForSale,
+  };
 }
 
 export default async function ProductGrid() {
-  const products = await getPopularProducts();
+  const resolved = await resolveCollection(
+    MOST_LOVED_ESSENTIALS.handleCandidates,
+    MOST_LOVED_ESSENTIALS.titleCandidates
+  );
+
+  const storeProducts = resolved
+    ? await getCollectionProducts({
+        collection: resolved.handle,
+        sortKey: 'BEST_SELLING',
+        reverse: false,
+      })
+    : await getProducts({
+        sortKey: 'BEST_SELLING',
+        reverse: false,
+      });
+
+  const products = storeProducts.slice(0, 8).map(mapToHomeProduct);
+  const descriptionHtml = resolved?.collection.descriptionHtml?.trim();
 
   return (
-    <section className={cn('bg-[#0d0d0d] py-20')}>
+    <section className={cn('bg-brand-oatmilk py-24')}>
       <div className="mx-auto max-w-7xl px-6">
-        <h2 className="font-heading mb-4 text-center text-4xl text-white md:text-5xl">Our Most Popular Products</h2>
-        <p className="mb-14 text-center text-gray-400">
-          Thousands of happy customers — see what they love most.
-        </p>
-        <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          {descriptionHtml ? (
+            <Prose
+              html={descriptionHtml}
+              className="prose-headings:text-brand-burgundy prose-p:font-jakarta prose-p:text-sm prose-p:leading-relaxed prose-p:text-brand-burgundy/60"
+            />
+          ) : null}
+        </div>
+        <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

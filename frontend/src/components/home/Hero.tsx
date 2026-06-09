@@ -34,7 +34,7 @@ export function Hero() {
           </h1>
 
           <Link
-            href="/search?q=summer"
+            href="/products/occasion-edit"
             className="mt-10 inline-flex items-center gap-2 rounded-full border border-cream-50/80 bg-cream-50/10 px-7 py-3 text-[12px] uppercase tracking-wider2 text-cream-50 backdrop-blur-sm transition-colors duration-300 ease-soft hover:bg-cream-50 hover:text-ink"
           >
             <Plus className="h-4 w-4" strokeWidth={1.5} />

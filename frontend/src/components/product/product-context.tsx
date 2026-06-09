@@ -7,16 +7,20 @@ import React, {
   useContext,
   useMemo,
   useOptimistic,
+  useState,
 } from "react";
 
 type ProductState = {
   [key: string]: string;
 } & {
   image?: string;
+  quantity?: string;
 };
 
 type ProductContextType = {
   state: ProductState;
+  quantity: number;
+  setQuantity: (quantity: number) => void;
   updateOption: (name: string, value: string) => ProductState;
   updateImage: (index: string) => ProductState;
 };
@@ -25,6 +29,7 @@ const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
 export function ProductProvider({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
+  const [quantity, setQuantity] = useState(1);
 
   const getInitialState = () => {
     const params: ProductState = {};
@@ -57,10 +62,12 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       state,
+      quantity,
+      setQuantity,
       updateOption,
       updateImage,
     }),
-    [state]
+    [state, quantity]
   );
 
   return (

@@ -3,43 +3,40 @@
 @source "../../.flowbite-react/class-list.json";
 @config "../../tailwind.config.ts";
 
-/* ─── Global design tokens ─────────────────────────────────────────────── */
 :root {
-  /* Core palette */
-  --color-primary:     #cc0000;   /* brand-red — CTAs, active states */
-  --color-secondary:   #1a1a1a;   /* brand-charcoal — navbar, footer */
-  --color-background:  #0a0a0a;   /* brand-black — page base */
-  --color-surface:     #141414;   /* slightly lighter dark — cards */
-  --color-surface-2:   #1e1e1e;   /* even lighter — inputs, secondary cards */
-  --color-text:        #ffffff;
-  --color-muted-text:  #9ca3af;   /* gray-400 */
-  --color-border:      #262626;   /* neutral-800 */
-  --color-accent:      #cc0000;
+  --background: #FAF6F0;
+  --foreground: #120A0C;
+  --navbar-height: 4rem;
+}
 
-  /* Border radius */
-  --radius-sm:   4px;
-  --radius-md:   8px;
-  --radius-lg:   9999px;  /* pill / full-round */
-
-  /* Shadow */
-  --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.5);
-
-  /* Transitions */
-  --transition-fast: 150ms ease;
-
-  /* Legacy compat */
-  --background: #0a0a0a;
-  --foreground: #ffffff;
+@media (min-width: 768px) {
+  :root {
+    --navbar-height: 5rem;
+  }
 }
 
 @theme {
-  --color-brand-black:    #0a0a0a;
-  --color-brand-charcoal: #1a1a1a;
-  --color-brand-red:      #cc0000;
-  --color-brand-neon:     #ff1744;
-  --color-brand-gray:     #2a2a2a;
-  --font-heading: var(--font-playfair), var(--font-serif), serif;
-  --font-body:    var(--font-inter), var(--font-sans), sans-serif;
+  /* ── Apni Dukan brand palette ───────────────────────────────────────── */
+  --color-brand-oatmilk: #FAF6F0;
+  --color-brand-sand: #F5EFE6;
+  --color-brand-burgundy: #4A1525;
+  --color-brand-clay: #D6A090;
+  --color-brand-champagne: #D3B38F;
+  --color-brand-night: #120A0C;
+  --color-brand-sage: #A3B19B;
+
+  /* Legacy aliases repointed to the luxury palette so any markup that still
+     references the old brand tokens renders on-brand instead of harsh red. */
+  --color-brand-black: #120A0C;
+  --color-brand-charcoal: #1a1012;
+  --color-brand-red: #4A1525;
+  --color-brand-neon: #D6A090;
+  --color-brand-gray: #e4d6c6;
+
+  /* Headings use Cormorant Garamond, body uses Plus Jakarta Sans.
+     Both are exposed globally from the root layout. */
+  --font-heading: var(--font-serif), "Cormorant Garamond", Georgia, serif;
+  --font-body: var(--font-jakarta), "Plus Jakarta Sans", ui-sans-serif, sans-serif;
 }
 
 @layer base {
@@ -58,8 +55,8 @@
   }
 
   ::selection {
-    background-color: #1A1A1A;
-    color: #FBF8F3;
+    background-color: #4A1525;
+    color: #FAF6F0;
   }
 
   /* Hide scrollbars on horizontal carousels */
@@ -89,6 +86,54 @@
     @apply inline-flex items-center justify-center rounded-full border border-ink/80 bg-transparent px-6 py-3 text-[12px] uppercase tracking-wider2 text-ink transition-colors duration-300 ease-soft hover:bg-ink hover:text-cream-50;
   }
 
+  .nav-icon-btn {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-full text-brand-burgundy/70 transition-all duration-300 ease-soft hover:bg-brand-sand hover:text-brand-burgundy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-clay/40;
+  }
+
+  .gallery-thumbs-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-brand-clay) color-mix(in srgb, var(--color-brand-sand) 80%, transparent);
+  }
+
+  .gallery-thumbs-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .gallery-thumbs-scroll::-webkit-scrollbar-track {
+    margin: 6px 0;
+    background: color-mix(in srgb, var(--color-brand-sand) 85%, transparent);
+    border-radius: 999px;
+  }
+
+  .gallery-thumbs-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      var(--color-brand-champagne) 0%,
+      var(--color-brand-clay) 100%
+    );
+    border: 1px solid color-mix(in srgb, var(--color-brand-oatmilk) 70%, transparent);
+    border-radius: 999px;
+  }
+
+  .gallery-thumbs-scroll::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      180deg,
+      var(--color-brand-clay) 0%,
+      var(--color-brand-burgundy) 100%
+    );
+  }
+
+  @media (min-width: 1024px) {
+    .gallery-thumbs-scroll.no-scrollbar {
+      -ms-overflow-style: auto;
+      scrollbar-width: thin;
+    }
+
+    .gallery-thumbs-scroll.no-scrollbar::-webkit-scrollbar {
+      display: block;
+    }
+  }
+
   .btn-solid {
     @apply inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-[12px] uppercase tracking-wider2 text-cream-50 transition-opacity duration-300 ease-soft hover:opacity-90;
   }
@@ -99,6 +144,50 @@
 
   .font-body {
     font-family: var(--font-body);
+  }
+
+  /* ── Luxury Journal typography (Cormorant Garamond + Plus Jakarta Sans) ── */
+  .font-cormorant {
+    font-family: var(--font-serif), 'Cormorant Garamond', serif;
+  }
+
+  .font-jakarta {
+    font-family: var(--font-jakarta), 'Plus Jakarta Sans', ui-sans-serif, sans-serif;
+  }
+
+  /* ── Apni Dukan brand system — reusable across every page ───────────── */
+
+  /* Primary action — solid burgundy, works on light surfaces. */
+  .btn-brand {
+    @apply inline-flex items-center justify-center rounded-full bg-brand-burgundy px-8 py-3.5 text-xs font-semibold uppercase tracking-wider2 text-brand-oatmilk transition-all duration-300 ease-soft hover:bg-[#3a0f1d] hover:shadow-[0_18px_40px_-20px_rgba(74,21,37,0.7)];
+  }
+
+  /* Outline action tuned for dark / image backgrounds (champagne on night). */
+  .btn-brand-outline {
+    @apply inline-flex items-center justify-center rounded-full border border-brand-champagne/60 px-8 py-3.5 text-xs font-semibold uppercase tracking-wider2 text-brand-oatmilk transition-all duration-300 ease-soft hover:border-brand-champagne hover:bg-brand-champagne hover:text-brand-night;
+  }
+
+  /* Outline action tuned for light surfaces (burgundy on oatmilk). */
+  .btn-brand-ghost {
+    @apply inline-flex items-center justify-center rounded-full border border-brand-burgundy/40 px-8 py-3.5 text-xs font-semibold uppercase tracking-wider2 text-brand-burgundy transition-all duration-300 ease-soft hover:border-brand-burgundy hover:bg-brand-burgundy hover:text-brand-oatmilk;
+  }
+
+  .eyebrow-brand {
+    @apply text-[11px] font-semibold uppercase tracking-[0.38em] text-brand-champagne;
+  }
+
+  /* Color is intentionally left to the call site so the heading works on both
+     light and dark surfaces. */
+  .heading-brand {
+    @apply font-heading font-medium tracking-tight;
+  }
+
+  .card-brand {
+    @apply rounded-3xl border border-brand-clay/15 bg-white shadow-[0_30px_60px_-45px_rgba(74,21,37,0.45)] transition-all duration-300 ease-soft;
+  }
+
+  .input-brand {
+    @apply w-full rounded-full border border-brand-clay/40 bg-brand-sand/60 px-5 py-3 text-sm text-brand-burgundy placeholder:text-brand-burgundy/40 transition duration-300 hover:border-brand-clay focus:border-brand-clay focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-clay/30;
   }
 }
 
@@ -121,6 +210,142 @@
 
   .animate-slide-up {
     animation: slide-up 0.9s ease-out both;
+  }
+
+  /* Subtle editorial fade-up used across luxury sections. */
+  .animate-fade-up {
+    animation: fade-up 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+
+  /* Premium card lift — pairs with image scale on hover. */
+  .hover-lift {
+    @apply transition-all duration-300 ease-soft hover:-translate-y-1.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-up,
+    .animate-slide-up,
+    .animate-fade-in,
+    .hover-lift {
+      animation: none;
+      transition: none;
+    }
+    .hover-lift:hover {
+      transform: none;
+    }
+  }
+
+  /* Add-to-cart feedback */
+  .animate-cart-shake {
+    animation: cart-shake 0.5s ease-in-out;
+    transform-origin: center;
+  }
+
+  .animate-cart-bounce {
+    animation: cart-bounce 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .animate-toast-in {
+    animation: toast-in 0.3s ease-out both;
+  }
+
+  /* Centered "added to cart" celebration overlay */
+  .animate-cart-overlay-fade {
+    animation: cart-overlay-fade 1.7s ease-in-out both;
+  }
+
+  .animate-added-pop {
+    animation: added-pop 1.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+
+  .animate-cart-pop {
+    animation: cart-pop 0.55s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+  }
+
+  .animate-check-pop {
+    animation: check-pop 0.5s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+    animation-delay: 0.28s;
+  }
+
+  .animate-cart-ring {
+    animation: cart-ring 1s ease-out both;
+    animation-delay: 0.1s;
+  }
+
+  .animate-cart-ring-2 {
+    animation: cart-ring 1s ease-out both;
+    animation-delay: 0.27s;
+  }
+
+  .cart-close-btn {
+    @apply relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-brand-clay/25 text-brand-burgundy/55 transition-all duration-300 ease-soft;
+  }
+
+  .cart-close-btn:hover {
+    @apply scale-105 border-brand-burgundy bg-brand-burgundy text-brand-oatmilk shadow-[0_8px_24px_-12px_rgba(74,21,37,0.55)];
+  }
+
+  .cart-close-btn:active {
+    @apply scale-95;
+  }
+
+  .cart-close-btn svg {
+    transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .cart-close-btn:hover svg {
+    transform: rotate(90deg);
+  }
+
+  .cart-empty-state {
+    animation: cart-empty-reveal 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+
+  .animate-wellness-float {
+    animation: wellness-float 4.5s ease-in-out infinite;
+  }
+
+  .animate-wellness-glow {
+    animation: wellness-glow 3.8s ease-in-out infinite;
+  }
+
+  .cart-empty-item {
+    animation: cart-empty-reveal 0.75s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+
+  .cart-empty-item-delay-1 {
+    animation-delay: 0.12s;
+  }
+
+  .cart-empty-item-delay-2 {
+    animation-delay: 0.22s;
+  }
+
+  .cart-empty-item-delay-3 {
+    animation-delay: 0.32s;
+  }
+
+  .cart-panel-body {
+    animation: cart-empty-reveal 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cart-close-btn:hover svg {
+      transform: none;
+    }
+
+    .cart-close-btn:hover,
+    .cart-close-btn:active {
+      transform: none;
+    }
+
+    .cart-empty-state,
+    .cart-empty-item,
+    .cart-panel-body,
+    .animate-wellness-float,
+    .animate-wellness-glow {
+      animation: none;
+    }
   }
 }
 
@@ -153,79 +378,162 @@
   }
 }
 
-/* ─── Add-to-cart button animations ─────────────────────────────────────── */
-@keyframes atc-bounce {
-  0%   { transform: scale(1); }
-  25%  { transform: scale(1.06); }
-  55%  { transform: scale(0.97); }
-  80%  { transform: scale(1.02); }
-  100% { transform: scale(1); }
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@keyframes atc-check-in {
-  from { opacity: 0; transform: scale(0.5) rotate(-20deg); }
-  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+@keyframes cart-shake {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-14deg);
+  }
+  40% {
+    transform: rotate(11deg);
+  }
+  60% {
+    transform: rotate(-7deg);
+  }
+  80% {
+    transform: rotate(4deg);
+  }
 }
 
-@keyframes cart-count-pop {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(1.35); }
-  70%  { transform: scale(0.92); }
-  100% { transform: scale(1); }
+@keyframes cart-bounce {
+  0% {
+    transform: scale(0.5);
+  }
+  55% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
-.animate-atc-bounce  { animation: atc-bounce 0.55s cubic-bezier(.22,.61,.36,1) both; }
-.animate-atc-check   { animation: atc-check-in 0.3s cubic-bezier(.22,.61,.36,1) both; }
-.animate-cart-pop    { animation: cart-count-pop 0.45s cubic-bezier(.22,.61,.36,1) both; }
-
-/* ─── Centered Add-to-Cart overlay animation ─────────────────────────── */
-@keyframes overlay-fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes overlay-fade-out {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-@keyframes card-pop-in {
-  0%   { opacity: 0; transform: scale(0.55) translateY(24px); }
-  65%  { transform: scale(1.04) translateY(-4px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-@keyframes item-fly-into-cart {
-  0%   { opacity: 1; transform: translate(-50%, -40px) scale(1); }
-  50%  { opacity: 1; transform: translate(-50%, 20px) scale(0.7); }
-  80%  { opacity: 0; transform: translate(-50%, 48px) scale(0.3); }
-  100% { opacity: 0; transform: translate(-50%, 52px) scale(0); }
-}
-@keyframes cart-wiggle {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  15%  { transform: rotate(-12deg) scale(1.08); }
-  30%  { transform: rotate(10deg)  scale(1.08); }
-  45%  { transform: rotate(-7deg)  scale(1.04); }
-  60%  { transform: rotate(5deg)   scale(1.02); }
-  75%  { transform: rotate(-2deg); }
-}
-@keyframes badge-pop-in {
-  0%   { opacity: 0; transform: scale(0) rotate(-45deg); }
-  65%  { transform: scale(1.25) rotate(8deg); }
-  100% { opacity: 1; transform: scale(1) rotate(0deg); }
-}
-@keyframes success-text-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 24px rgba(204, 0, 0, 0.25); }
-  50%       { box-shadow: 0 0 48px rgba(204, 0, 0, 0.55); }
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.atc-overlay-in   { animation: overlay-fade-in  0.25s ease both; }
-.atc-overlay-out  { animation: overlay-fade-out 0.35s ease both; }
-.atc-card-in      { animation: card-pop-in      0.45s cubic-bezier(.22,.61,.36,1) both; }
-.atc-item-fly     { animation: item-fly-into-cart 0.55s cubic-bezier(.22,.61,.36,1) 0.1s both; }
-.atc-cart-wiggle  { animation: cart-wiggle      0.55s cubic-bezier(.22,.61,.36,1) 0.45s both; }
-.atc-badge-in     { animation: badge-pop-in     0.35s cubic-bezier(.22,.61,.36,1) 0.75s both; }
-.atc-text-in      { animation: success-text-in  0.3s  ease 0.85s both; }
-.atc-sub-in       { animation: success-text-in  0.3s  ease 0.95s both; }
-.atc-card-glow    { animation: glow-pulse       1.2s  ease-in-out 0.4s 2; }
+@keyframes cart-overlay-fade {
+  0% {
+    opacity: 0;
+  }
+  12%,
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes added-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.75) translateY(12px);
+  }
+  14% {
+    opacity: 1;
+    transform: scale(1.04) translateY(0);
+  }
+  24% {
+    transform: scale(1);
+  }
+  82% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.94) translateY(-8px);
+  }
+}
+
+@keyframes cart-pop {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.18);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes check-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes cart-ring {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+@keyframes wellness-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes wellness-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.52);
+  }
+}
+
+@keyframes cart-empty-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

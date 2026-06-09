@@ -8,9 +8,12 @@ import { AddToWishlist } from "./add-to-wishlist";
 export function ProductDescription({ product }: { product: Product }) {
   return (
     <>
-      <div className="mb-6 flex flex-col border-b border-neutral-800 pb-6">
-        <h1 className="mb-3 text-4xl font-semibold tracking-tight text-white">{product.title}</h1>
-        <div className="mr-auto w-auto rounded-full bg-brand-red px-4 py-1.5 text-sm font-semibold text-white">
+      <div className="mb-8 flex flex-col border-b border-brand-clay/15 pb-8">
+        <p className="mb-3 font-jakarta text-[11px] font-semibold tracking-[0.4em] text-brand-champagne uppercase">
+          Premium Fashion
+        </p>
+        <h1 className="font-cormorant mb-4 text-5xl leading-tight font-medium text-brand-burgundy md:text-6xl">{product.title}</h1>
+        <div className="mr-auto w-auto rounded-full bg-brand-sand px-5 py-2 font-jakarta text-sm font-semibold text-brand-burgundy">
           <Price
             amount={product.priceRange.maxVariantPrice.amount}
             currencyCode={product.priceRange.maxVariantPrice.currencyCode}
@@ -18,7 +21,7 @@ export function ProductDescription({ product }: { product: Product }) {
         </div>
       </div>
       <VariantSelector options={product.options} variants={product.variants} />
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-stretch">
+      <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-stretch">
         <div className="min-w-0 flex-1">
           <AddToCart product={product} />
         </div>
@@ -26,7 +29,7 @@ export function ProductDescription({ product }: { product: Product }) {
       </div>
       {product.descriptionHtml ? (
         <Prose
-          className="mb-6 text-sm leading-light dark:text-white/[60%]"
+          className="mb-6 font-jakarta text-sm leading-relaxed text-brand-burgundy/70"
           html={product.descriptionHtml}
         />
       ) : null}

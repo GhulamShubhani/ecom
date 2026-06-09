@@ -2,225 +2,206 @@
 
 import Link from 'next/link';
 import { useState, Suspense } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { Heart, Menu, Search as SearchIcon, X } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { Heart, Menu, Search as SearchIcon, User, X } from 'lucide-react';
 import { HOME_NAV_LINKS } from '@/lib/data';
+import { BRAND } from '@/constants/brand';
 import { cn } from '@/lib/utils';
+import { BrandLogo } from '@/components/brand/brand-logo';
+import { BrandWordmark } from '@/components/brand/brand-wordmark';
 import Search, { SearchSkeleton } from './search';
 import CartModal from '@/components/cart/modal';
-import AnnouncementBar from '../AnnouncementBar';
-import type { NavLink } from "@/types/nav";
+import MobileStickyNav from './mobile-sticky-nav';
+import type { NavLink } from '@/types/nav';
 
 type NavbarProps = {
   items?: NavLink[];
+  mobileStickyItems?: NavLink[];
 };
 
-/* ─── Active-state logic lives here so it can use useSearchParams ─── */
-function NavLinksInner({
-  mobile,
-  onLinkClick,
-}: {
-  mobile?: boolean;
-  onLinkClick?: () => void;
-}) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  /**
-   * Exact match for links with query params (e.g. New Arrivals vs Brands).
-   * Plain path links (no query) still use starts-with logic.
-   */
-  const isActive = (href: string): boolean => {
-    const [hrefPath, hrefQuery] = href.split('?');
-
-    if (hrefPath === '/') {
-      return pathname === '/' || pathname.startsWith('/product');
-    }
-
-    // Path must match first
-    if (pathname !== hrefPath && !pathname.startsWith(hrefPath + '/')) {
-      return false;
-    }
-
-    // No query in the href — path match is enough
-    if (!hrefQuery) return true;
-
-    // Href has query params — all of them must match the current URL
-    const hrefParams = new URLSearchParams(hrefQuery);
-    for (const [key, value] of hrefParams.entries()) {
-      if (searchParams.get(key) !== value) return false;
-    }
-    return true;
-  };
-
-  if (mobile) {
+function isLinkActive(href: string, pathname: string) {
+  if (href === '/') {
     return (
-      <>
-        {HOME_NAV_LINKS.map((item) => {
-          const active = isActive(item.href);
-          return (
-            <Link
-              key={item.label}
-              href={item.href}
-              onClick={onLinkClick}
-              className={cn(
-                'rounded-lg px-3 py-2.5 text-sm uppercase tracking-[0.12em] transition-colors',
-                active
-                  ? 'bg-brand-red/10 text-brand-red font-semibold'
-                  : 'text-gray-200 hover:bg-white/5 hover:text-white'
-              )}
-            >
-              {item.label}
-            </Link>
-          );
-        })}
-      </>
+      pathname === '/' ||
+      pathname.startsWith('/product') ||
+      pathname.startsWith('/search')
     );
   }
-
-  return (
-    <>
-      {HOME_NAV_LINKS.map((item) => {
-        const active = isActive(item.href);
-        return (
-          <Link
-            key={item.label}
-            href={item.href}
-            className={cn(
-              'relative text-xs font-medium tracking-[0.12em] uppercase transition-colors duration-300',
-              'after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:scale-x-0',
-              'after:bg-brand-red after:transition-transform after:duration-300 after:origin-center',
-              active
-                ? 'text-brand-red after:scale-x-100'
-                : 'text-gray-300 hover:text-white hover:after:scale-x-100'
-            )}
-          >
-            {item.label}
-          </Link>
-        );
-      })}
-    </>
-  );
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-/* Minimal fallback shown while Suspense resolves (no active state) */
-function NavLinksFallback({ mobile }: { mobile?: boolean }) {
-  if (mobile) {
-    return (
-      <>
-        {HOME_NAV_LINKS.map((item) => (
-          <Link
-            key={item.label}
-            href={item.href}
-            className="rounded-lg px-3 py-2.5 text-sm uppercase tracking-[0.12em] text-gray-200"
-          >
-            {item.label}
-          </Link>
-        ))}
-      </>
-    );
-  }
-  return (
-    <>
-      {HOME_NAV_LINKS.map((item) => (
-        <Link
-          key={item.label}
-          href={item.href}
-          className="text-xs font-medium tracking-[0.12em] uppercase text-gray-300"
-        >
-          {item.label}
-        </Link>
-      ))}
-    </>
+const navLinkClass = (active: boolean) =>
+  cn(
+    'group relative inline-flex shrink-0 items-center whitespace-nowrap py-1 font-jakarta text-[11px] tracking-[0.2em] uppercase transition-colors duration-300',
+    active
+      ? 'font-semibold text-brand-burgundy'
+      : 'font-medium text-brand-burgundy/65 hover:text-brand-burgundy'
   );
-}
 
-/* ─── Main Navbar ─────────────────────────────────────────────────── */
-export default function Navbar({ items }: NavbarProps) {
+const underlineClass = (active: boolean) =>
+  cn(
+    'absolute -bottom-1.5 left-0 h-px w-full origin-left bg-brand-champagne transition-transform duration-300 ease-out',
+    active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+  );
+
+export default function Navbar({ items, mobileStickyItems = [] }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const navLinks = items?.length ? items : HOME_NAV_LINKS;
 
   return (
     <>
-      <AnnouncementBar />
-      <header className="sticky top-9 z-40 border-b border-brand-red/20 bg-brand-black/95 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:h-20 md:px-6">
-
-          {/* Mobile menu toggle */}
+      <div className="sticky top-0 z-40">
+        <header className="border-b border-brand-clay/15 bg-brand-oatmilk/90 backdrop-blur-xl">
+          <div className="relative mx-auto flex h-[var(--navbar-height)] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+          {/* Mobile menu trigger */}
           <button
             aria-label="Open menu"
             onClick={() => setMobileMenuOpen(true)}
-            className="text-gray-200 transition-colors hover:text-brand-red md:hidden"
+            className="nav-icon-btn border border-brand-clay/30 md:hidden"
           >
-            <Menu className="h-6 w-6" />
+            <Menu className="h-5 w-5" />
           </button>
 
-          {/* Logo */}
+          {/* Desktop: logo + navigation */}
+          <div className="hidden min-w-0 flex-1 items-center gap-8 md:flex lg:gap-10">
+            <Link
+              href="/"
+              className="group flex shrink-0 items-center gap-3 text-brand-burgundy transition-colors duration-300 hover:text-brand-clay"
+              aria-label={`${BRAND.name} home`}
+            >
+              {/* <BrandLogo className="h-9 w-9 text-brand-champagne transition-colors duration-300 group-hover:text-brand-clay" /> */}
+              <BrandWordmark />
+            </Link>
+
+            <nav
+              aria-label="Primary"
+              className="no-scrollbar hidden min-w-0 flex-1 items-center gap-3 overflow-x-auto md:flex lg:gap-5 xl:gap-6"
+            >
+              {HOME_NAV_LINKS.map((item) => {
+                const active = isLinkActive(item.href, pathname);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    aria-current={active ? 'page' : undefined}
+                    className={navLinkClass(active)}
+                  >
+                    {item.label}
+                    <span className={underlineClass(active)} />
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Mobile: centered logo */}
           <Link
             href="/"
-            className="font-heading text-2xl tracking-wide text-white hover:text-brand-red transition-colors duration-300"
+            className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 text-brand-burgundy transition-colors duration-300 hover:text-brand-clay md:hidden"
+            aria-label="Apni Dukan home"
           >
-            APNI DUKAN
+            {/* <BrandLogo className="h-7 w-7 text-brand-champagne" /> */}
+            <BrandWordmark size="sm" />
           </Link>
 
-          {/* Desktop nav — wrapped in Suspense for useSearchParams */}
-          <nav className="hidden items-center gap-6 md:flex">
-            <Suspense fallback={<NavLinksFallback />}>
-              <NavLinksInner />
-            </Suspense>
-          </nav>
-
-          {/* Actions */}
-          <div className="flex items-center gap-3">
-            <div className="hidden md:block md:w-56 lg:w-72">
+          {/* Utility actions */}
+          <div className="flex items-center gap-0.5 sm:gap-1 lg:gap-2">
+            <div className="hidden w-52 lg:block xl:w-64">
               <Suspense fallback={<SearchSkeleton />}>
                 <Search />
               </Suspense>
             </div>
+
             <Link
               href="/search"
               aria-label="Search"
-              className="text-gray-300 transition-colors hover:text-brand-red md:hidden"
+              className="nav-icon-btn lg:hidden"
             >
               <SearchIcon className="h-5 w-5" />
             </Link>
+
             <button
+              type="button"
               aria-label="Wishlist"
-              className="text-gray-300 transition-colors hover:text-brand-red"
+              className="nav-icon-btn hidden sm:inline-flex"
             >
               <Heart className="h-5 w-5" />
             </button>
+
+            <button
+              type="button"
+              aria-label="Account"
+              className="nav-icon-btn hidden md:inline-flex"
+            >
+              <User className="h-5 w-5" />
+            </button>
+
             <CartModal />
           </div>
         </div>
-      </header>
+        </header>
 
-      {/* Mobile drawer */}
+        <MobileStickyNav items={mobileStickyItems} />
+      </div>
+
       {mobileMenuOpen ? (
         <>
           <button
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-brand-night/45 backdrop-blur-sm"
             aria-label="Close menu overlay"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <aside className="fixed inset-y-0 left-0 z-50 w-72 bg-brand-charcoal p-6">
+          <aside className="fixed inset-y-0 left-0 z-50 flex w-[min(320px,88vw)] flex-col border-r border-brand-clay/20 bg-brand-oatmilk p-6 shadow-[30px_0_80px_-50px_rgba(74,21,37,0.65)] sm:p-7">
             <div className="mb-8 flex items-center justify-between">
               <Link
                 href="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className="font-heading text-xl text-white hover:text-brand-red transition-colors"
+                className="flex items-center gap-3 text-brand-burgundy"
               >
-                APNI DUKAN
+                {/* <BrandLogo className="h-10 w-10 text-brand-champagne" /> */}
+                <BrandWordmark size="lg" />
               </Link>
-              <button aria-label="Close menu" onClick={() => setMobileMenuOpen(false)}>
-                <X className="h-6 w-6 text-white" />
+              <button
+                aria-label="Close menu"
+                onClick={() => setMobileMenuOpen(false)}
+                className="nav-icon-btn border border-brand-clay/30"
+              >
+                <X className="h-4 w-4" />
               </button>
             </div>
-            <nav className="flex flex-col gap-1">
-              <Suspense fallback={<NavLinksFallback mobile />}>
-                <NavLinksInner mobile onLinkClick={() => setMobileMenuOpen(false)} />
-              </Suspense>
+
+            <nav aria-label="Mobile primary" className="flex flex-col gap-2">
+              {HOME_NAV_LINKS.map((item) => {
+                const active = isLinkActive(item.href, pathname);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    aria-current={active ? 'page' : undefined}
+                    className={cn(
+                      'rounded-full border px-4 py-3 font-jakarta text-xs tracking-[0.18em] uppercase transition-colors duration-300',
+                      active
+                        ? 'border-brand-burgundy bg-brand-burgundy text-brand-oatmilk'
+                        : 'border-brand-clay/20 text-brand-burgundy/70 hover:border-brand-clay hover:bg-brand-sand/60 hover:text-brand-burgundy'
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
             </nav>
-            <div className="mt-8 border-t border-neutral-800 pt-6">
+
+            <div className="mt-auto space-y-3 border-t border-brand-clay/15 pt-6">
+              <div className="flex items-center gap-2">
+                <button type="button" aria-label="Wishlist" className="nav-icon-btn">
+                  <Heart className="h-5 w-5" />
+                </button>
+                <button type="button" aria-label="Account" className="nav-icon-btn">
+                  <User className="h-5 w-5" />
+                </button>
+              </div>
               <Suspense fallback={<SearchSkeleton />}>
                 <Search />
               </Suspense>

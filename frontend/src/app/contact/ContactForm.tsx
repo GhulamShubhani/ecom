@@ -21,7 +21,7 @@ const initialContactState: ContactFormState = {
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
-  return <p className="mt-1.5 text-xs text-red-400">{message}</p>;
+  return <p className="mt-1.5 text-xs text-brand-burgundy">{message}</p>;
 }
 
 type FieldProps = {
@@ -47,11 +47,11 @@ function Field({
 }: FieldProps) {
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-gray-400">
-        {label} {optional ? <span className="text-gray-600">(optional)</span> : null}
+      <label htmlFor={id} className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-brand-burgundy/55">
+        {label} {optional ? <span className="text-brand-burgundy/35">(optional)</span> : null}
       </label>
       <div className="relative">
-        <Icon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+        <Icon className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-brand-clay" />
         <input
           id={id}
           name={id}
@@ -75,30 +75,30 @@ export default function ContactForm() {
   if (state.status === 'success') {
     return (
       <div className="card-brand relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-br from-brand-sage/10 via-transparent to-transparent" />
         <div className="relative flex flex-col items-center justify-center px-8 py-16 text-center">
-          <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 ring-1 ring-green-500/30">
-            <CheckCircle2 className="h-8 w-8 text-green-400" />
+          <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-brand-sage/10 ring-1 ring-brand-sage/30">
+            <CheckCircle2 className="h-8 w-8 text-brand-sage" />
           </div>
-          <h3 className="heading-brand mb-3 text-2xl">Message sent</h3>
-          <p className="max-w-sm leading-relaxed text-gray-400">{state.message}</p>
+          <h3 className="heading-brand mb-3 text-2xl text-brand-burgundy">Message sent</h3>
+          <p className="max-w-sm leading-relaxed text-brand-burgundy/60">{state.message}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="card-brand relative overflow-hidden shadow-[0_20px_60px_-20px_rgba(204,0,0,0.25)]">
+    <div className="card-brand relative overflow-hidden">
       {/* Accent header */}
-      <div className="relative border-b border-brand-gray bg-gradient-to-r from-brand-red/20 via-brand-charcoal to-brand-charcoal px-6 py-5 md:px-8">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-red to-transparent" />
-        <h3 className="font-heading text-xl font-bold text-white">Send us a message</h3>
-        <p className="mt-1 text-sm text-gray-400">We usually reply within a few hours.</p>
+      <div className="relative border-b border-brand-clay/15 bg-brand-sand/70 px-6 py-6 md:px-8">
+        <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-clay to-transparent" />
+        <h3 className="font-cormorant text-3xl font-medium text-brand-burgundy">Send us a message</h3>
+        <p className="mt-1 text-sm text-brand-burgundy/55">We usually reply within a few hours.</p>
       </div>
 
       <form action={formAction} className="space-y-5 p-6 md:p-8" noValidate>
         {state.status === 'error' && !state.errors ? (
-          <div className="flex items-center gap-2 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+          <div className="flex items-center gap-2 rounded-xl border border-brand-clay/40 bg-brand-clay/10 px-4 py-3 text-sm text-brand-burgundy">
             <AlertCircle className="h-4 w-4 shrink-0" />
             {state.message}
           </div>
@@ -129,7 +129,7 @@ export default function ContactForm() {
             id="phone"
             label="Phone"
             type="tel"
-            placeholder="+92 300 0000000"
+            placeholder="+47 ..."
             icon={Phone}
             autoComplete="tel"
             optional
@@ -147,7 +147,7 @@ export default function ContactForm() {
         <div>
           <label
             htmlFor="message"
-            className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-gray-400"
+            className="mb-2 block text-xs font-medium uppercase tracking-[0.12em] text-brand-burgundy/55"
           >
             Message
           </label>
@@ -164,7 +164,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={pending}
-          className="btn-brand group w-full shadow-lg shadow-brand-red/20 disabled:cursor-not-allowed disabled:opacity-70"
+          className="btn-brand group w-full disabled:cursor-not-allowed disabled:opacity-70"
         >
           {pending ? (
             <>
@@ -179,8 +179,8 @@ export default function ContactForm() {
           )}
         </button>
 
-        <p className="text-center text-xs text-gray-600">
-          We reply within 24 hours. Your details are always kept private.
+        <p className="text-center text-xs text-brand-burgundy/45">
+          We reply within 24 hours. Your details stay private and secure.
         </p>
       </form>
     </div>

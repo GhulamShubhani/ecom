@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Fragment, useState } from "react";
-import Search from "./search";
 
 export default function MobileMenu({ menu }: { menu: Menu[] }) {
   const [isOpen, setIsOpen] = useState(false);

@@ -4,7 +4,7 @@ import { Heart } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 
-const WISHLIST_KEY = "apni-dukan-wishlist";
+const WISHLIST_KEY = "playme-wishlist";
 
 function getWishlist(): string[] {
   if (typeof window === "undefined") return [];
@@ -23,13 +23,11 @@ function saveWishlist(handles: string[]) {
 
 type Props = {
   productHandle: string;
+  compact?: boolean;
 };
 
-export function AddToWishlist({ productHandle }: Props) {
-  const [isWishlisted, setIsWishlisted] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return getWishlist().includes(productHandle);
-  });
+export function AddToWishlist({ productHandle, compact = false }: Props) {
+  const [isWishlisted, setIsWishlisted] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   const syncFromStorage = useCallback(() => {
@@ -37,19 +35,16 @@ export function AddToWishlist({ productHandle }: Props) {
   }, [productHandle]);
 
   useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setMounted(true);
+      syncFromStorage();
+    }, 0);
     window.addEventListener("wishlist-updated", syncFromStorage);
-
     return () => {
+      window.clearTimeout(timer);
       window.removeEventListener("wishlist-updated", syncFromStorage);
     };
   }, [syncFromStorage]);
-
-  // useEffect(() => {
-  //   setMounted(true);
-  //   syncFromStorage();
-  //   window.addEventListener("wishlist-updated", syncFromStorage);
-  //   return () => window.removeEventListener("wishlist-updated", syncFromStorage);
-  // }, [syncFromStorage]);
 
   function toggleWishlist() {
     const list = getWishlist();
@@ -67,21 +62,25 @@ export function AddToWishlist({ productHandle }: Props) {
       aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
       aria-pressed={mounted ? isWishlisted : false}
       className={clsx(
-        "inline-flex shrink-0 items-center justify-center gap-2 rounded-full border px-6 py-4 text-sm font-medium tracking-wide transition-colors",
+        "inline-flex shrink-0 items-center justify-center gap-2 rounded-full border font-jakarta font-medium tracking-wide transition-colors",
+        compact
+          ? "h-11 w-11"
+          : "px-6 py-4 text-sm",
         isWishlisted
-          ? "border-red-300 bg-red-50 text-red-600 dark:border-red-800 dark:bg-red-950/30 dark:text-red-400"
-          : "border-neutral-300 bg-white text-neutral-700 hover:border-neutral-400 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:border-neutral-500"
+          ? "border-brand-clay bg-brand-clay/15 text-brand-burgundy"
+          : "border-brand-clay/30 bg-white text-brand-burgundy/70 hover:border-brand-clay hover:text-brand-burgundy"
       )}
     >
       <Heart
-        className="h-5 w-5"
+        className={clsx("shrink-0", compact ? "h-5 w-5" : "h-5 w-5")}
         strokeWidth={1.5}
-        fill={isWishlisted ? "currentColor" : "none"}
+        fill={mounted && isWishlisted ? "currentColor" : "none"}
       />
-
-      <span className="hidden sm:inline">
-        {isWishlisted ? "Wishlisted" : "Wishlist"}
-      </span>
+      {!compact ? (
+        <span className="hidden sm:inline">
+          {mounted && isWishlisted ? "Wishlisted" : "Wishlist"}
+        </span>
+      ) : null}
     </button>
   );
 }

@@ -42,7 +42,7 @@ export default function VariantSelector({
   return options.map((option) => (
     <form key={option.id}>
       <dl className="mb-8">
-        <dt className="mb-4 text-sm uppercase tracking-wide">{option.name}</dt>
+        <dt className="mb-4 font-jakarta text-[11px] font-semibold uppercase tracking-[0.32em] text-brand-burgundy/55">{option.name}</dt>
         <dd className="flex flex-wrap gap-3">
           {option.values.map((value) => {
             const optionNameLowerCase = option.name.toLowerCase();
@@ -81,12 +81,13 @@ export default function VariantSelector({
                 disabled={!isAvailableForSale}
                 title={`${option.name} ${value}${!isAvailableForSale ? " (Out of Stock)" : ""}`}
                 className={clsx(
-                  "flex min-w-[48px] items-center justify-center rounded-full border border-neutral-700 bg-neutral-900 px-2 py-1 text-sm text-white",
+                  "flex min-w-[48px] items-center justify-center rounded-full border px-4 py-2 font-jakarta text-sm transition duration-300 ease-soft",
                   {
-                    "cursor-default ring-2 ring-brand-red border-brand-red": isActive,
-                    "ring-1 ring-transparent transition duration-300 ease-in-out hover:ring-brand-red hover:border-brand-red":
+                    "cursor-default border-brand-burgundy bg-brand-burgundy text-brand-oatmilk":
+                      isActive,
+                    "border-brand-clay/30 bg-brand-sand/60 text-brand-burgundy hover:border-brand-clay":
                       !isActive && isAvailableForSale,
-                    "relative z-10 cursor-not-allowed overflow-hidden text-neutral-500 ring-1 ring-neutral-700 before:absolute before:inset-x-0 before:-z-10 before:h-px before:-rotate-45 before:bg-neutral-700 before:transition-transform":
+                    "relative z-10 cursor-not-allowed overflow-hidden border-brand-clay/15 bg-brand-sand/30 text-brand-burgundy/30 before:absolute before:inset-x-0 before:-z-10 before:h-px before:-rotate-45 before:bg-brand-clay/40":
                       !isAvailableForSale,
                   }
                 )}

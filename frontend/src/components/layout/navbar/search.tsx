@@ -15,8 +15,11 @@ export default function Search() {
   const lastPushedRef = useRef(initialQuery);
 
   useEffect(() => {
-    setValue(searchParams?.get("q") ?? "");
-    lastPushedRef.current = searchParams?.get("q") ?? "";
+    const timer = window.setTimeout(() => {
+      setValue(searchParams?.get("q") ?? "");
+      lastPushedRef.current = searchParams?.get("q") ?? "";
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [searchParams]);
 
   useEffect(() => {
@@ -55,14 +58,13 @@ export default function Search() {
       <input
         type="text"
         name="search"
-        placeholder="Search for products..."
+        placeholder="Search dresses, denim, accessories..."
         autoComplete="off"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className="w-full rounded-lg border border-ink/15 bg-white px-4 py-2 text-sm text-black placeholder:text-neutral-500 dark:border-neutral-800 dark:bg-transparent dark:text-white dark:placeholder:text-neutral-400"
-        suppressHydrationWarning
+        className="input-brand h-10 pr-11 text-xs"
       />
-      <div className="pointer-events-none absolute right-0 top-0 mr-3 flex h-full items-center text-ink-muted">
+      <div className="pointer-events-none absolute top-0 right-0 mr-4 flex h-full items-center text-brand-burgundy/45">
         <SearchIcon className="h-4 w-4" />
       </div>
     </form>
@@ -74,11 +76,10 @@ export function SearchSkeleton() {
     <form className="relative w-full">
       <input
         type="text"
-        placeholder="Search for products..."
-        className="w-full rounded-lg border border-ink/15 bg-white px-4 py-2 text-sm text-black placeholder:text-neutral-500 dark:border-neutral-800 dark:bg-transparent dark:text-white dark:placeholder:text-neutral-400"
-        suppressHydrationWarning
+        placeholder="Search dresses, denim, accessories..."
+        className="input-brand h-10 pr-11 text-xs"
       />
-      <div className="pointer-events-none absolute right-0 top-0 mr-3 flex h-full items-center text-ink-muted">
+      <div className="pointer-events-none absolute top-0 right-0 mr-4 flex h-full items-center text-brand-burgundy/45">
         <SearchIcon className="h-4 w-4" />
       </div>
     </form>

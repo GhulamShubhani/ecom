@@ -1,5 +1,6 @@
 "use server";
 
+import { BRAND } from "@/constants/brand";
 import { z } from "zod";
 import nodemailer from "nodemailer";
 
@@ -90,7 +91,7 @@ export async function submitContactForm(
     });
 
     await transporter.sendMail({
-      from: `"PLAY ME Contact" <${process.env.SMTP_USER}>`,
+      from: `"${BRAND.name} Contact" <${process.env.SMTP_USER}>`,
       to: process.env.CONTACT_TO_EMAIL,
       replyTo: email,
       subject: `New contact message: ${subject}`,
@@ -129,7 +130,7 @@ export async function submitContactForm(
                   <tr>
                     <td style="background:linear-gradient(135deg, #0f0f0f 0%, #1b1b1b 70%, #220000 100%); padding:32px 36px; border-bottom:1px solid #2a2a2a;">
                       <div style="font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#ff8a8a; font-weight:700; margin-bottom:10px;">
-                        PLAY ME
+                        ${BRAND.name}
                       </div>
                       <div style="font-size:30px; line-height:38px; font-weight:700; color:#ffffff; margin:0 0 8px 0;">
                         New Contact Message
@@ -222,7 +223,7 @@ export async function submitContactForm(
                   <tr>
                     <td style="padding:24px 32px 32px 32px;">
                       <div style="border-top:1px solid #262626; padding-top:18px; font-size:12px; line-height:20px; color:#7f7f7f;">
-                        This message was sent from the <span style="color:#ffffff;">PLAY ME</span> website contact form.
+                        This message was sent from the <span style="color:#ffffff;">${BRAND.name}</span> website contact form.
                       </div>
                     </td>
                   </tr>

@@ -15,6 +15,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      { source: "/blogs", destination: "/search", permanent: false },
+      { source: "/blogs/:path*", destination: "/search", permanent: false },
+    ];
+  },
 };
 
 export default withFlowbiteReact(nextConfig);

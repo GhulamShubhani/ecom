@@ -1,12 +1,18 @@
-import { getProducts } from '@/lib/shopify';
+import type { AudienceCollectionConfig } from '@/constants/audience-collections';
+import { IMAGES } from '@/constants/images';
+import { getCollectionProducts, getProducts } from '@/lib/shopify';
+import { resolveCollection } from '@/lib/resolve-collection';
 import type { Product as HomeProduct } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import Prose from '@/components/prose';
 import ProductCard from './ProductCard';
 
 // ── same mapping helper your ProductGrid already uses ──────────────────────
-function mapToHomeProduct(product: Awaited<ReturnType<typeof getProducts>>[number], index: number): HomeProduct {
+type StoreProduct = Awaited<ReturnType<typeof getCollectionProducts>>[number];
+
+function mapToHomeProduct(product: StoreProduct, index: number): HomeProduct {
   const price = Number(product.priceRange.minVariantPrice.amount || 0);
   const compareAtPrice = index % 2 === 0 ? Math.round(price * 1.25) : undefined;
 
@@ -23,60 +29,77 @@ function mapToHomeProduct(product: Awaited<ReturnType<typeof getProducts>>[numbe
     image:
       product.featuredImage?.url ||
       product.images?.[0]?.url ||
-      'https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=1200&q=80',
-      href: `/product/${product.handle}`,
-      variantId: product.variants?.[0]?.id,
+      IMAGES.products.fallback,
+    href: `/product/${product.handle}`,
+    handle: product.handle,
+    variantId: product.variants?.[0]?.id,
+    currencyCode: product.priceRange.minVariantPrice.currencyCode,
+    availableForSale: product.availableForSale,
   };
 }
 
-// ── data fetcher — same as ProductGrid but filtered by query ───────────────
-async function getCategoryProducts(query: string): Promise<HomeProduct[]> {
-  try {
-    const storeProducts = await getProducts({ sortKey: 'BEST_SELLING', reverse: false, query });
-    return storeProducts.slice(0, 4).map(mapToHomeProduct);
-  } catch {
-    return [];
+async function getCategoryProducts(
+  config: AudienceCollectionConfig,
+  resolvedHandle?: string
+): Promise<HomeProduct[]> {
+  if (!resolvedHandle) {
+    if (!config.tagFallback) return [];
+
+    const taggedProducts = await getProducts({
+      query: config.tagFallback,
+      sortKey: 'BEST_SELLING',
+      reverse: false,
+    });
+
+    return taggedProducts.slice(0, 4).map(mapToHomeProduct);
   }
+
+  let storeProducts = await getCollectionProducts({
+    collection: resolvedHandle,
+    sortKey: 'BEST_SELLING',
+    reverse: false,
+  });
+
+  if (!storeProducts.length && config.tagFallback) {
+    storeProducts = await getProducts({
+      query: config.tagFallback,
+      sortKey: 'BEST_SELLING',
+      reverse: false,
+    });
+  }
+
+  return storeProducts.slice(0, 4).map(mapToHomeProduct);
 }
 
-// ── component props ────────────────────────────────────────────────────────
-type Props = {
-  title: string;
-  subtitle?: string;
-  href: string;
-  query: string;        
-  accentColor?: string;  
-};
+export default async function CategoryProductRow(config: AudienceCollectionConfig) {
+  const { slug } = config;
 
-export default async function CategoryProductRow({
-  title,
-  subtitle = 'Collection',
-  href,
-  query,
-  accentColor = 'text-brand-red',
-}: Props) {
-  const products = await getCategoryProducts(query);
-    
+  const resolved = await resolveCollection(
+    config.handleCandidates,
+    config.titleCandidates
+  );
+  const descriptionHtml = resolved?.collection.descriptionHtml?.trim();
+  const products = await getCategoryProducts(config, resolved?.handle);
+
   if (!products.length) return null;
 
   return (
-    <section className="py-14">
+    <section className="py-20">
       {/* ── row header ───────────────────────────────────────────── */}
-      <div className="mx-auto mb-6 flex max-w-7xl items-end justify-between px-4 md:px-6">
-        <div>
-          <p className={cn('mb-1 text-xs font-semibold uppercase tracking-[0.25em]', accentColor)}>
-            {subtitle}
-          </p>
-          <h2 className="font-heading text-3xl font-bold text-white md:text-4xl">
-            {title}
-          </h2>
+      <div className="mx-auto mb-9 flex max-w-7xl items-end justify-between gap-6 px-6">
+        <div className="max-w-2xl">
+          {descriptionHtml ? (
+            <Prose
+              html={descriptionHtml}
+              className="prose-p:font-jakarta prose-p:text-brand-burgundy/60 prose-headings:text-brand-burgundy"
+            />
+          ) : null}
         </div>
 
         <Link
-          href={href}
+          href={`/${slug}`}
           className={cn(
-            'group flex items-center gap-1.5 text-sm font-medium transition-colors hover:opacity-80',
-            accentColor,
+            'group hidden items-center gap-2 rounded-full border border-brand-clay/30 px-5 py-2.5 font-jakarta text-xs font-semibold uppercase tracking-wider2 text-brand-burgundy transition-all hover:border-brand-burgundy hover:bg-brand-burgundy hover:text-brand-oatmilk sm:flex',
           )}
         >
           View All
@@ -84,32 +107,16 @@ export default async function CategoryProductRow({
         </Link>
       </div>
 
-      {/* ── product row ──────────────────────────────────────────── */}
-      <div className="relative">
-        {/* right-edge fade — hints more cards on mobile */}
-        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16
-                        bg-gradient-to-l from-brand-black to-transparent md:hidden" />
-
-        <div
-          className={cn(
-            // mobile: horizontal snap scroll
-            'flex gap-4 overflow-x-auto px-4 pb-2',
-            'snap-x snap-mandatory scroll-smooth',
-            '[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]',
-            // desktop: normal 4-col grid (same as ProductGrid)
-            'md:grid md:grid-cols-4 md:overflow-visible md:px-6',
-            'md:mx-auto md:max-w-7xl',
-          )}
-        >
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="w-[200px] flex-shrink-0 snap-start md:w-auto md:flex-shrink md:snap-none"
-            >
-              <ProductCard product={product} />
-            </div>
-          ))}
-        </div>
+      {/* ── product grid ─────────────────────────────────────────── */}
+      <div
+        className={cn(
+          'mx-auto grid max-w-7xl grid-cols-2 gap-5 px-6',
+          'md:grid-cols-4',
+        )}
+      >
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
       </div>
     </section>
   );

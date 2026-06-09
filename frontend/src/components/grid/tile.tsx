@@ -20,21 +20,22 @@ export function GridTileImage({
   return (
     <div
       className={clsx(
-        "group flex h-full w-full items-center justify-center overflow-hidden border bg-[#141414] hover:border-brand-red",
+        "group flex h-full w-full items-center justify-center overflow-hidden rounded-3xl border bg-brand-sand transition-all duration-300 ease-soft hover:border-brand-clay",
         {
           relative: label,
-          "border-2 border-brand-red": active,
-          "border-neutral-800": !active,
+          "border-2 border-brand-clay": active,
+          "border-brand-clay/15": !active,
         }
       )}
     >
       {props.src ? (
         <Image
-          className={clsx("relative h-full w-full object-contain", {
-            "transition duration-300 ease-in-out group-hover:scale-105":
+          className={clsx("relative h-full w-full object-contain p-3", {
+            "transition duration-300 ease-soft group-hover:scale-105":
               isInteractive,
           })}
           {...props}
+          alt={props.alt ?? ""}
         />
       ) : null}
       {label ? (
