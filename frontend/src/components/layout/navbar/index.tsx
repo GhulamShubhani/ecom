@@ -5,9 +5,7 @@ import { useState, Suspense } from 'react';
 import { usePathname } from 'next/navigation';
 import { Heart, Menu, Search as SearchIcon, User, X } from 'lucide-react';
 import { HOME_NAV_LINKS } from '@/lib/data';
-import { BRAND } from '@/constants/brand';
 import { cn } from '@/lib/utils';
-import { BrandLogo } from '@/components/brand/brand-logo';
 import { BrandWordmark } from '@/components/brand/brand-wordmark';
 import Search, { SearchSkeleton } from './search';
 import CartModal from '@/components/cart/modal';
@@ -32,7 +30,7 @@ function isLinkActive(href: string, pathname: string) {
 
 const navLinkClass = (active: boolean) =>
   cn(
-    'group relative inline-flex shrink-0 items-center whitespace-nowrap py-1 font-jakarta text-[11px] tracking-[0.2em] uppercase transition-colors duration-300',
+    'group relative inline-flex items-center py-1 font-jakarta text-[11px] tracking-[0.2em] uppercase transition-colors duration-300',
     active
       ? 'font-semibold text-brand-burgundy'
       : 'font-medium text-brand-burgundy/65 hover:text-brand-burgundy'
@@ -68,7 +66,7 @@ export default function Navbar({ items, mobileStickyItems = [] }: NavbarProps) {
             <Link
               href="/"
               className="group flex shrink-0 items-center gap-3 text-brand-burgundy transition-colors duration-300 hover:text-brand-clay"
-              aria-label={`${BRAND.name} home`}
+              aria-label="Apni Dukan home"
             >
               {/* <BrandLogo className="h-9 w-9 text-brand-champagne transition-colors duration-300 group-hover:text-brand-clay" /> */}
               <BrandWordmark />
@@ -76,7 +74,7 @@ export default function Navbar({ items, mobileStickyItems = [] }: NavbarProps) {
 
             <nav
               aria-label="Primary"
-              className="no-scrollbar hidden min-w-0 flex-1 items-center gap-3 overflow-x-auto md:flex lg:gap-5 xl:gap-6"
+              className="no-scrollbar hidden max-w-[min(52vw,520px)] items-center gap-4 overflow-x-auto md:flex lg:max-w-none lg:gap-6 xl:gap-8"
             >
               {HOME_NAV_LINKS.map((item) => {
                 const active = isLinkActive(item.href, pathname);

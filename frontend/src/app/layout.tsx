@@ -16,6 +16,7 @@ import { getCart } from "@/lib/shopify";
 import Navbar from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import NavigationProgress from '@/components/layout/NavigationProgress';
+import ScrollToTopButton from '@/components/layout/scroll-to-top-button';
 import AddToCartAnimation from '@/components/cart/add-to-cart-animation';
 
 function mapMenuToNavLinks(
@@ -72,7 +73,7 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
   title: {
-    default: `${SITE_CONFIG.name} — Your shop, your style.`,
+    default: `${SITE_CONFIG.name} — Intimacy on your terms.`,
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
@@ -118,6 +119,7 @@ export default async function RootLayout({
           <Navbar items={navItems} mobileStickyItems={mobileStickyItems} />
           {children}
           <Footer />
+          <ScrollToTopButton />
           <AddToCartAnimation />
         </CartProvider>
       </body>

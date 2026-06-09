@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
 import type { Product as HomeProduct } from "@/lib/types";
+import CategorySortBar from "./category-sort-bar";
+import ProductCard from "./home/ProductCard";
 
 const LOAD_THROTTLE_MS = 900;
 
@@ -11,8 +13,6 @@ type CategoryPageInfo = {
   hasNextPage: boolean;
   endCursor: string | null;
 };
-import CategorySortBar from "./category-sort-bar";
-import ProductCard from "./home/ProductCard";
 
 type Props = {
   slug: string;
@@ -33,18 +33,20 @@ export default function ShopCategoryProductsSection({
   const [pageInfo, setPageInfo] = useState(initialPageInfo);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const pageInfoRef = useRef(initialPageInfo);
   const requestInFlightRef = useRef(false);
   const lastLoadAtRef = useRef(0);
 
   useEffect(() => {
-    setProducts(initialProducts);
-    setPageInfo(initialPageInfo);
-    setError(null);
-  }, [initialProducts, initialPageInfo, currentSort]);
+    pageInfoRef.current = pageInfo;
+  }, [pageInfo]);
 
   const loadMore = useCallback(async () => {
-    if (!pageInfo.hasNextPage || !pageInfo.endCursor || requestInFlightRef.current) {
+    const info = pageInfoRef.current;
+
+    if (!info.hasNextPage || !info.endCursor || requestInFlightRef.current) {
       return;
     }
 
@@ -61,7 +63,7 @@ export default function ShopCategoryProductsSection({
     try {
       const params = new URLSearchParams({
         first: "20",
-        after: pageInfo.endCursor,
+        after: info.endCursor,
         sort: currentSort,
       });
 
@@ -90,24 +92,48 @@ export default function ShopCategoryProductsSection({
       requestInFlightRef.current = false;
       setIsLoading(false);
     }
-  }, [currentSort, pageInfo.endCursor, pageInfo.hasNextPage, slug]);
+  }, [currentSort, slug]);
+
+  const tryLoadMore = useCallback(() => {
+    void loadMore();
+  }, [loadMore]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
-    if (!sentinel || !pageInfo.hasNextPage) return;
+    if (!sentinel) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0]?.isIntersecting) {
-          void loadMore();
+          tryLoadMore();
         }
       },
-      { rootMargin: "500px 0px" }
+      { root: null, rootMargin: "400px 0px", threshold: 0 }
     );
 
     observer.observe(sentinel);
+
     return () => observer.disconnect();
-  }, [loadMore, pageInfo.hasNextPage]);
+  }, [tryLoadMore, products.length]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (!pageInfoRef.current.hasNextPage) return;
+
+      const sentinel = sentinelRef.current;
+      if (!sentinel) return;
+
+      const rect = sentinel.getBoundingClientRect();
+      if (rect.top <= window.innerHeight + 400) {
+        tryLoadMore();
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [tryLoadMore, products.length]);
 
   return (
     <>
@@ -146,7 +172,7 @@ export default function ShopCategoryProductsSection({
               </p>
             ) : null}
 
-            <div ref={sentinelRef} className="h-12" aria-hidden="true" />
+            <div ref={sentinelRef} className="h-24" aria-hidden="true" />
           </>
         ) : (
           <div className="flex min-h-[360px] flex-col items-center justify-center rounded-3xl border border-brand-clay/15 bg-white/70 px-6 text-center">

@@ -11,23 +11,8 @@ const MENU_TITLE_ALIASES: Record<string, string> = {
   'for par': 'for-couples',
   'til par': 'for-couples',
   'for couples': 'for-couples',
-  dresses: 'for-couples',
   'for kink': 'for-kink',
   kink: 'for-kink',
-  'new arrivals': 'for-kink',
-  'new-in': 'for-kink',
-  women: 'for-her',
-  men: 'for-him',
-  'for-her': 'for-her',
-  'for-him': 'for-him',
-  'for-couples': 'for-couples',
-  bestsellers: 'collections/bestsellers',
-  clothing: 'collections/clothing',
-  accessories: 'collections/accessories',
-  jewelry: 'collections/jewelry',
-  shoes: 'collections/shoes',
-  denim: 'collections/denim',
-  sale: 'collections/sale',
 };
 
 function buildAudienceSlugLookup(): Record<string, string> {

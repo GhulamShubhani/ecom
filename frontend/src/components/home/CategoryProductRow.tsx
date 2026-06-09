@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import Prose from '@/components/prose';
+import MobileTwoUpProductCarousel from './mobile-two-up-product-carousel';
 import ProductCard from './ProductCard';
 
 // ── same mapping helper your ProductGrid already uses ──────────────────────
@@ -107,16 +108,14 @@ export default async function CategoryProductRow(config: AudienceCollectionConfi
         </Link>
       </div>
 
-      {/* ── product grid ─────────────────────────────────────────── */}
-      <div
-        className={cn(
-          'mx-auto grid max-w-7xl grid-cols-2 gap-5 px-6',
-          'md:grid-cols-4',
-        )}
-      >
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+      {/* ── products: mobile carousel / desktop grid ───────────────── */}
+      <div className="mx-auto max-w-7xl">
+        <MobileTwoUpProductCarousel products={products} />
+        <div className="hidden gap-5 px-6 md:grid md:grid-cols-4">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
       </div>
     </section>
   );

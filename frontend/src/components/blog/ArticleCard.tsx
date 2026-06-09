@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import type { Article } from '@/lib/shopify/types';
 import { cn, formatDate } from '@/lib/utils';
-import { articleHref, journalCategory, journalExcerpt, journalImage } from '@/lib/journal';
+import { articleHref, journalExcerpt, journalImage } from '@/lib/journal';
 
 type Props = {
   article: Article;
@@ -26,7 +26,6 @@ export default function ArticleCard({
 }: Props) {
   const href = articleHref(article);
   const image = journalImage(article, index);
-  const category = journalCategory(article, index);
   const excerpt = journalExcerpt(article);
   const isHorizontal = orientation === 'horizontal';
 

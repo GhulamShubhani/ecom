@@ -5,6 +5,7 @@ import { getCollectionProducts, getProducts } from '@/lib/shopify';
 import type { Product as HomeProduct } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import Prose from '@/components/prose';
+import MobileTwoUpProductCarousel from './mobile-two-up-product-carousel';
 import ProductCard from './ProductCard';
 
 type StoreProduct = Awaited<ReturnType<typeof getCollectionProducts>>[number];
@@ -66,7 +67,8 @@ export default async function ProductGrid() {
             />
           ) : null}
         </div>
-        <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
+        <MobileTwoUpProductCarousel products={products} />
+        <div className="hidden gap-6 lg:grid lg:grid-cols-4">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

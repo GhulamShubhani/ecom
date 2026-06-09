@@ -1,6 +1,5 @@
 import { AUDIENCE_COLLECTIONS } from '@/constants/audience-collections';
 import HeroSection from './HeroSection';
-import CategoryGrid from './CategoryGrid';
 import ProductGrid from './ProductGrid';
 import PromoSplitBanner from './PromoSplitBanner';
 import ImageOverlayBanner from './ImageOverlayBanner';

@@ -10,8 +10,6 @@ export type CollectionLookupConfig = {
 export type AudienceCollectionConfig = CollectionLookupConfig & {
   slug: string;
   eyebrow: string;
-  heroTitle: string;
-  heroDescription: string;
   accentClass: string;
   gradientClass: string;
   heroImage: string;
@@ -23,65 +21,98 @@ export type AudienceCollectionConfig = CollectionLookupConfig & {
 };
 
 export const AUDIENCE_COLLECTIONS: Record<
-  'forHer' | 'forHim' | 'forCouples' | 'forKink',
+  'heroHer' | 'forHer' | 'heroHim' | 'forHim' | 'heroCouples' | 'forCouples' | 'heroBestsellers' | 'forKink',
   AudienceCollectionConfig
 > = {
-  forHer: {
-    slug: 'for-her',
-    handleCandidates: ['for-her', 'women', 'heroHenne'],
-    titleCandidates: ['For Her', 'Women', 'heroHenne'],
-    eyebrow: 'Women',
-    heroTitle: "Women's Fashion",
-    heroDescription:
-      'Dresses, tops, denim and seasonal edits — curated styles with premium fabrics and everyday polish.',
+  heroHer: {
+    slug: 'hero-her',
+    handleCandidates: ['heroHenne'],
+    titleCandidates: ['heroHenne'],
+    eyebrow: 'For Her',
     accentClass: 'text-brand-clay',
     gradientClass: 'from-brand-clay/40',
     heroImage: IMAGES.editorial.forHer,
-    rowSubtitle: 'Season Edit',
+    rowSubtitle: 'Editorial Collection',
+    rowAccentClass: 'text-brand-clay',
+  },
+  forHer: {
+    slug: 'for-her',
+    handleCandidates: ['for-henne', 'til-henne'],
+    titleCandidates: ['For Henne', 'Til Henne'],
+    eyebrow: 'For Her',
+    accentClass: 'text-brand-clay',
+    gradientClass: 'from-brand-clay/40',
+    heroImage: IMAGES.editorial.forHer,
+    rowSubtitle: 'Editorial Collection',
     rowAccentClass: 'text-brand-clay',
   },
   forHim: {
     slug: 'for-him',
-    handleCandidates: ['for-him', 'men', 'heroHan'],
-    titleCandidates: ['For Him', 'Men', 'heroHan'],
-    eyebrow: 'Men',
-    heroTitle: "Men's Style",
-    heroDescription:
-      'Tailored essentials, smart casuals and refined layers built for comfort and confidence.',
+    handleCandidates: ['for-han', 'for-ham', 'til-han', 'til-ham'],
+    titleCandidates: ['For ham', 'For Han', 'Til Han'],
+    eyebrow: 'For Him',
     accentClass: 'text-brand-champagne',
     gradientClass: 'from-brand-champagne/40',
     heroImage: IMAGES.editorial.forHim,
-    rowSubtitle: 'Tailored Essentials',
+    rowSubtitle: 'Refined Essentials',
+    rowAccentClass: 'text-brand-champagne',
+  },
+  heroHim: {
+    slug: 'hero-him',
+    handleCandidates: ['heroHan'],
+    titleCandidates: ['heroHan'],
+    eyebrow: 'For Him',
+    accentClass: 'text-brand-champagne',
+    gradientClass: 'from-brand-champagne/40',
+    heroImage: IMAGES.editorial.forHim,
+    rowSubtitle: 'Refined Essentials',
     rowAccentClass: 'text-brand-champagne',
   },
   forCouples: {
     slug: 'for-couples',
-    handleCandidates: ['dresses', 'for-couples', 'heroPar'],
-    titleCandidates: ['Dresses', 'For Couples', 'heroPar'],
-    eyebrow: 'Dresses',
-    heroTitle: 'Dresses & Occasion Wear',
-    heroDescription:
-      'Evening gowns, midi dresses and polished looks for celebrations, parties and special nights out.',
+    handleCandidates: ['for-par', 'til-par'],
+    titleCandidates: ['For Par', 'Til Par'],
+    eyebrow: 'For Couples',
     accentClass: 'text-brand-burgundy',
     gradientClass: 'from-brand-burgundy/30',
     heroImage: IMAGES.editorial.forCouples,
-    rowSubtitle: 'Occasion & Evening',
+    rowSubtitle: 'Shared Rituals',
     rowAccentClass: 'text-brand-burgundy',
-    tagFallback: 'tag:collection:dresses',
+    tagFallback: 'tag:audience:par',
+  },
+  heroCouples: {
+    slug: 'hero-couples',
+    handleCandidates: ['heroPar'],
+    titleCandidates: ['heroPar'],
+    eyebrow: 'For Couples',
+    accentClass: 'text-brand-burgundy',
+    gradientClass: 'from-brand-burgundy/30',
+    heroImage: IMAGES.editorial.forCouples,
+    rowSubtitle: 'Shared Rituals',
+    rowAccentClass: 'text-brand-burgundy',
+    tagFallback: 'tag:audience:par',
+  },
+  heroBestsellers: {
+    slug: 'for-couples',
+    handleCandidates: ['heroPar'],
+    titleCandidates: ['heroPar'],
+    eyebrow: 'For Couples',
+    accentClass: 'text-brand-burgundy',
+    gradientClass: 'from-brand-burgundy/30',
+    heroImage: IMAGES.editorial.forCouples,
+    rowSubtitle: 'Shared Rituals',
+    rowAccentClass: 'text-brand-burgundy',
+    tagFallback: 'tag:audience:par',
   },
   forKink: {
     slug: 'for-kink',
-    handleCandidates: ['new-arrivals', 'new-in', 'for-kink'],
-    titleCandidates: ['New Arrivals', 'New In', 'For Kink'],
-    tagFallback: 'tag:collection:new-arrivals',
-    eyebrow: 'New Arrivals',
-    heroTitle: 'New Arrivals',
-    heroDescription:
-      'Fresh drops and just-landed pieces — be the first to shop the latest edit from Apni Dukan.',
+    handleCandidates: ['kink', 'for-kink'],
+    titleCandidates: ['Kink', 'For Kink'],
+    eyebrow: 'For Kink',
     accentClass: 'text-brand-clay',
     gradientClass: 'from-brand-clay/35',
     heroImage: IMAGES.editorial.essentials,
-    rowSubtitle: 'Just Landed',
+    rowSubtitle: 'Bold Exploration',
     rowAccentClass: 'text-brand-clay',
   },
 };

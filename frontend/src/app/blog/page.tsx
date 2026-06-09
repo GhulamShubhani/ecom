@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, CalendarDays, Sparkles } from 'lucide-react';
 import { BLOG_POSTS } from '@/lib/data';
@@ -79,10 +80,12 @@ export default function BlogPage() {
                 className="group overflow-hidden rounded-3xl border border-brand-gray bg-brand-charcoal transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/50 hover:shadow-2xl hover:shadow-brand-red/10"
               >
                 <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-800 to-brand-gray">
-                  <img
+                  <Image
                     src={blogImages[index % blogImages.length]}
                     alt={post.title}
-                    className="h-full w-full object-cover opacity-80 transition duration-500 group-hover:scale-110 group-hover:opacity-100"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover opacity-80 transition duration-500 group-hover:scale-110 group-hover:opacity-100"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-black/80 via-transparent to-transparent" />
