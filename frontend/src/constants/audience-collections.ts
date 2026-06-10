@@ -38,7 +38,7 @@ export const AUDIENCE_COLLECTIONS: Record<
   AudienceCollectionConfig
 > = {
   heroHer: {
-    slug: "hero-her",
+    slug: "for-her",
     handleCandidates: ["heroHer"],
     titleCandidates: ["heroHer"],
     eyebrow: "For Her",
@@ -51,7 +51,7 @@ export const AUDIENCE_COLLECTIONS: Record<
     rowAccentClass: "text-brand-clay",
   },
   heroFavorites: {
-    slug: "hero-favorites",
+    slug: "bestsellers",
     handleCandidates: ["heroFavorites"],
     titleCandidates: ["heroFavorites"],
     eyebrow: "For Favorites",
@@ -64,7 +64,7 @@ export const AUDIENCE_COLLECTIONS: Record<
     rowAccentClass: "text-brand-clay",
   },
   heroBrand: {
-    slug: "hero-brand",
+    slug: "accessories",
     handleCandidates: ["heroBrand"],
     titleCandidates: ["heroBrand"],
     eyebrow: "For Brand",
@@ -77,7 +77,7 @@ export const AUDIENCE_COLLECTIONS: Record<
     rowAccentClass: "text-brand-clay",
   },
   heroHim: {
-    slug: "hero-him",
+    slug: "for-him",
     handleCandidates: ["heroHim"],
     titleCandidates: ["heroHim"],
     eyebrow: "For Him",
@@ -90,7 +90,7 @@ export const AUDIENCE_COLLECTIONS: Record<
     rowAccentClass: "text-brand-champagne",
   },
   heroCouples: {
-    slug: "hero-couples",
+    slug: "clothing",
     handleCandidates: ["heroCouples"],
     titleCandidates: ["heroCouples"],
     eyebrow: "For Couples",
@@ -104,7 +104,7 @@ export const AUDIENCE_COLLECTIONS: Record<
     tagFallback: "tag:audience:par",
   },
   heroBestsellers: {
-    slug: "for-bestsellers",
+    slug: "bestsellers",
     handleCandidates: ["heroBestsellers"],
     titleCandidates: ["heroBestsellers"],
     eyebrow: "For Bestsellers",
@@ -118,7 +118,7 @@ export const AUDIENCE_COLLECTIONS: Record<
     tagFallback: "tag:audience:par",
   },
   forCouples: {
-    slug: "for-couples",
+    slug: "accessories",
     handleCandidates: ["for-par", "til-par"],
     titleCandidates: ["For Par", "Til Par"],
     eyebrow: "For Couples",
@@ -171,7 +171,7 @@ export const AUDIENCE_COLLECTIONS: Record<
     rowAccentClass: "text-brand-clay",
   },
   dresses: {
-    slug: "for-couples",
+    slug: "dresses",
     handleCandidates: ["dresses"],
     titleCandidates: ["Dresses", "dresses"],
     eyebrow: "Curated Collection",

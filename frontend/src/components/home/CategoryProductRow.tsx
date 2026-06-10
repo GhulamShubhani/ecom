@@ -91,12 +91,13 @@ export default async function CategoryProductRow(config: AudienceCollectionConfi
     config.handleCandidates,
     config.titleCandidates
   );
+  
   const collectionHandle = resolved?.handle ?? config.handleCandidates[0];
   const products = await getCategoryProducts(config, collectionHandle);
-
+  
   if (!products.length) return null;
 
-  const viewAllHref = `/collections/${collectionHandle}`;
+  const viewAllHref = `/collections/${config?.slug}`;
 
   return (
     <section className="py-10 md:py-14">
