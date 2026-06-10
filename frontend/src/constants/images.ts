@@ -25,6 +25,13 @@ const editorial = {
   essentials: local('editorial/essentials.jpg'),
 } as const;
 
+const collections = {
+  dresses:
+    'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=1600&q=80',
+  newArrivals:
+    'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80',
+} as const;
+
 /** Rotating pool for legacy mock product cards. */
 const productCards = [
   products.fallback,
@@ -40,6 +47,7 @@ export const IMAGES = {
   pages,
   products,
   editorial,
+  collections,
   productCards,
 } as const;
 

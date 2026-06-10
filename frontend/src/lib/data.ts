@@ -12,8 +12,8 @@ export const HOME_NAV_LINKS: HomeNavLink[] = [
   { label: 'Shop', href: '/' },
   { label: 'Women', href: '/for-her' },
   { label: 'Men', href: '/for-him' },
-  { label: 'Dresses', href: '/for-couples' },
-  { label: 'New Arrivals', href: '/for-kink' },
+  { label: 'Dresses', href: '/collections/dresses' },
+  { label: 'New Arrivals', href: '/collections/new-arrivals' },
   { label: 'Contact', href: '/contact' },
   { label: 'About Us', href: '/about-us' },
 ];

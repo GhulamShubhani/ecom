@@ -11,11 +11,11 @@ const helpLinks = [
 ];
 
 const shopLinks = [
-  { label: 'Dresses', href: '/search?q=dresses' },
+  { label: 'Dresses', href: '/collections/dresses' },
   { label: 'Clothing', href: '/search?q=clothing' },
   { label: 'Belts', href: '/search?q=belts' },
   { label: 'Bags', href: '/search?q=bags' },
-  { label: 'New Arrivals', href: '/search?sort=latest-desc' },
+  { label: 'New Arrivals', href: '/collections/new-arrivals' },
   { label: 'Sale', href: '/search?q=sale' },
   { label: 'All Products', href: '/search' },
 ];

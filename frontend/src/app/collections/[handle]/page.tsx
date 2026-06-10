@@ -1,8 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { BRAND } from "@/constants/brand";
+import { getAudienceConfigByHandle } from "@/constants/audience-collections";
+import { IMAGES } from "@/constants/images";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import CategoryHero from "@/components/collections/category-hero";
 import CollectionProductsGrid from "@/components/collections/collection-products-grid";
 import { formatProductCount, getCollectionImage } from "@/components/collections/collection-card";
 import { defaultSort, sorting } from "@/lib/constants";
@@ -68,52 +70,37 @@ export default async function CollectionDetailPage({
     path: `/collections/${page.collection.handle}`,
     products: { filters: [] },
   };
-  const heroImage = getCollectionImage(collection);
+  const audienceConfig = getAudienceConfigByHandle(handle);
+  const shopifyHero = getCollectionImage(collection);
+  const heroImageSrc =
+    shopifyHero.src ?? audienceConfig?.heroImage ?? IMAGES.banners.overlay;
+  const heroTitle = audienceConfig?.heroTitle ?? page.collection.title;
+  const heroEyebrow = audienceConfig?.eyebrow ?? "Curated Collection";
+  const heroAccent = audienceConfig?.accentClass ?? "text-brand-champagne";
+  const heroDescription =
+    page.collection.description?.trim() || audienceConfig?.heroDescription;
 
   return (
     <main className="min-h-screen bg-brand-oatmilk text-brand-burgundy">
-      <section className="relative overflow-hidden border-b border-brand-clay/15 bg-brand-night text-brand-oatmilk">
-        {heroImage.src ? (
-          <Image
-            src={heroImage.src}
-            alt={heroImage.alt}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-45"
-          />
-        ) : null}
-        <div className="absolute inset-0 bg-linear-to-t from-brand-night via-brand-night/60 to-brand-night/20" />
-        <div className="relative mx-auto max-w-screen-2xl px-6 py-20 md:py-28">
-          <nav className="mb-10 flex flex-wrap items-center gap-3 font-jakarta text-xs font-semibold tracking-[0.22em] text-brand-oatmilk/70 uppercase">
-            <Link href="/" className="transition-colors hover:text-brand-clay">
-              Home
-            </Link>
-            <span>/</span>
-            <Link href="/collections" className="transition-colors hover:text-brand-clay">
-              Collections
-            </Link>
-            <span>/</span>
-            <span className="text-brand-clay">{page.collection.title}</span>
-          </nav>
-          <p className="mb-4 text-[11px] font-semibold tracking-[0.4em] text-brand-champagne uppercase">
-            Curated Collection
-          </p>
-          <h1 className="max-w-4xl font-cormorant text-6xl leading-tight font-medium md:text-8xl">
-            {page.collection.title}
-          </h1>
-          <p className="mt-5 text-[11px] font-semibold tracking-[0.34em] text-brand-champagne uppercase">
-            {formatProductCount(page.collection.productCount)}
-          </p>
-          {page.collection.description ? (
-            <p className="mt-6 max-w-2xl font-jakarta text-sm leading-relaxed text-brand-oatmilk/75 md:text-base">
-              {page.collection.description}
-            </p>
-          ) : null}
-        </div>
-      </section>
+      <CategoryHero
+        eyebrow={heroEyebrow}
+        title={heroTitle}
+        description={heroDescription}
+        descriptionHtml={page.collection.descriptionHtml?.trim()}
+        imageSrc={heroImageSrc}
+        imageAlt={shopifyHero.alt || `${heroTitle} collection`}
+        accentClass={heroAccent}
+        productCount={formatProductCount(page.collection.productCount)}
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Collections", href: "/collections" },
+          { label: heroTitle },
+        ]}
+        ctaHref="#products"
+        ctaLabel="Shop Collection"
+      />
 
-      <section className="mx-auto max-w-screen-2xl px-6 py-12 md:py-16">
+      <section id="products" className="mx-auto max-w-screen-2xl px-6 py-12 md:py-16">
         <div className="mb-8 flex flex-col gap-5 rounded-3xl border border-brand-clay/15 bg-white/60 p-5 md:flex-row md:items-center md:justify-between">
           <p className="font-jakarta text-sm text-brand-burgundy/65">
             Showing {page.products.length.toLocaleString()} of{" "}

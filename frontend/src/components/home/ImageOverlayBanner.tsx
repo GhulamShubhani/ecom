@@ -94,7 +94,7 @@ export default function ImageOverlayBanner({
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(211,179,143,0.12)_0%,transparent_65%)]" />
       </div>
 
-      <div className="relative z-10 px-6 py-24 md:py-32">
+      <div className="relative z-10 px-6 py-14 md:py-20">
         <div className="mx-auto max-w-6xl">
           {/* Overlay copy */}
           <div
@@ -103,16 +103,16 @@ export default function ImageOverlayBanner({
               isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             )}
           >
-            <h2 className="font-cormorant text-5xl leading-tight font-medium text-brand-oatmilk md:text-6xl lg:text-7xl">
+            <h2 className="font-cormorant text-4xl leading-tight font-medium text-brand-oatmilk md:text-5xl lg:text-6xl">
               {heading}
             </h2>
-            <p className="mx-auto mt-6 max-w-2xl font-jakarta text-base leading-relaxed text-brand-oatmilk/75 md:text-lg">
+            <p className="mx-auto mt-4 max-w-2xl font-jakarta text-base leading-relaxed text-brand-oatmilk/75 md:text-lg">
               {description}
             </p>
             <Link
               href={button.href}
               className={cn(
-                'btn-brand-outline mt-10 inline-flex transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[0_20px_50px_-30px_rgba(211,179,143,0.6)]'
+                'btn-brand-outline mt-8 inline-flex transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[0_20px_50px_-30px_rgba(211,179,143,0.6)]'
               )}
             >
               {button.label}
@@ -122,20 +122,20 @@ export default function ImageOverlayBanner({
           {/* Feature grid — 4 cols desktop, 2x2 mobile */}
           <div
             className={cn(
-              'mt-16 grid grid-cols-2 gap-4 transition-all delay-200 duration-1000 ease-soft md:mt-20 md:gap-6 lg:grid-cols-4',
+              'mt-10 grid grid-cols-2 gap-3 transition-all delay-200 duration-1000 ease-soft md:mt-12 md:gap-4 lg:grid-cols-4',
               isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
             )}
           >
             {highlights.map(({ icon: Icon, title, text }) => (
               <article
                 key={title}
-                className="group rounded-2xl border border-brand-champagne/20 bg-brand-night/40 p-5 backdrop-blur-sm transition-all duration-300 ease-soft hover:-translate-y-1 hover:border-brand-champagne/45 hover:bg-brand-night/55 md:p-6"
+                className="group rounded-2xl border border-brand-champagne/20 bg-brand-night/40 p-4 backdrop-blur-sm transition-all duration-300 ease-soft hover:-translate-y-1 hover:border-brand-champagne/45 hover:bg-brand-night/55 md:p-5"
               >
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full border border-brand-champagne/30 bg-brand-champagne/10 text-brand-champagne transition-colors duration-300 group-hover:bg-brand-champagne/20">
-                  <Icon className="h-5 w-5" />
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-brand-champagne/30 bg-brand-champagne/10 text-brand-champagne transition-colors duration-300 group-hover:bg-brand-champagne/20">
+                  <Icon className="h-4 w-4" />
                 </div>
-                <h3 className="font-cormorant text-xl font-medium text-brand-oatmilk md:text-2xl">{title}</h3>
-                <p className="mt-2 font-jakarta text-xs leading-relaxed text-brand-oatmilk/65 md:text-sm">{text}</p>
+                <h3 className="font-cormorant text-lg font-medium text-brand-oatmilk md:text-xl">{title}</h3>
+                <p className="mt-1.5 font-jakarta text-xs leading-relaxed text-brand-oatmilk/65 md:text-sm">{text}</p>
               </article>
             ))}
           </div>

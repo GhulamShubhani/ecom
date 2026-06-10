@@ -18,7 +18,12 @@ export async function resolveCollection(
   handleCandidates: string[] = [],
   titleCandidates: string[] = []
 ): Promise<ResolvedCollection | null> {
-  const collections = (await getCollections()).filter((item) => item.handle);
+  let collections: Collection[] = [];
+  try {
+    collections = (await getCollections()).filter((item) => item.handle);
+  } catch {
+    return null;
+  }
   const handles = Array.isArray(handleCandidates) ? handleCandidates : [];
   const titles = Array.isArray(titleCandidates) ? titleCandidates : [];
 

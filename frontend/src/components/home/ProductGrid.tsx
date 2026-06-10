@@ -5,7 +5,6 @@ import { getCollectionProducts, getProducts } from '@/lib/shopify';
 import type { Product as HomeProduct } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import Prose from '@/components/prose';
-import MobileTwoUpProductCarousel from './mobile-two-up-product-carousel';
 import ProductCard from './ProductCard';
 
 type StoreProduct = Awaited<ReturnType<typeof getCollectionProducts>>[number];
@@ -53,11 +52,11 @@ export default async function ProductGrid() {
         reverse: false,
       });
 
-  const products = storeProducts.slice(0, 8).map(mapToHomeProduct);
+  const products = storeProducts.slice(0, 5).map(mapToHomeProduct);
   const descriptionHtml = resolved?.collection.descriptionHtml?.trim();
 
   return (
-    <section className={cn('bg-brand-oatmilk py-24')}>
+    <section className={cn('bg-brand-oatmilk py-12 md:py-16')}>
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto mb-14 max-w-2xl text-center">
           {descriptionHtml ? (
@@ -67,8 +66,12 @@ export default async function ProductGrid() {
             />
           ) : null}
         </div>
-        <MobileTwoUpProductCarousel products={products} />
-        <div className="hidden gap-6 lg:grid lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-6 md:hidden">
+          {products.slice(0, 4).map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+        <div className="hidden gap-6 md:grid md:grid-cols-5">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

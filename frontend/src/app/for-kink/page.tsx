@@ -24,7 +24,7 @@ export default async function ForKinkPage({ searchParams }: PageProps) {
   return (
     <ShopCategoryPage
       searchParams={params}
-      config={AUDIENCE_COLLECTIONS.forKink}
+      config={AUDIENCE_COLLECTIONS.newArrivals}
     />
   );
 }

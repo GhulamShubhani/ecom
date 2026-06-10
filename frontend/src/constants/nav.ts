@@ -29,7 +29,7 @@ export const MEGA_MENU: Record<MegaMenuKey, MegaMenuContent> = {
         links: [
           { label: 'For Her', href: '/for-her', arrow: true },
           { label: 'For Him', href: '/for-him', arrow: true },
-          { label: 'Dresses', href: '/for-couples', arrow: true },
+          { label: 'Dresses', href: '/collections/dresses', arrow: true },
           { label: 'Clothing', href: '/collections/clothing', arrow: true },
           { label: 'Jewelry', href: '/collections/jewelry', arrow: true },
           { label: 'Accessories', href: '/collections/accessories', arrow: true },

@@ -24,7 +24,7 @@ export default async function ForCouplesPage({ searchParams }: PageProps) {
   return (
     <ShopCategoryPage
       searchParams={params}
-      config={AUDIENCE_COLLECTIONS.forCouples}
+      config={AUDIENCE_COLLECTIONS.dresses}
     />
   );
 }

@@ -13,6 +13,10 @@ const MENU_TITLE_ALIASES: Record<string, string> = {
   'for couples': 'for-couples',
   'for kink': 'for-kink',
   kink: 'for-kink',
+  dresses: 'for-couples',
+  dress: 'for-couples',
+  'new arrivals': 'for-kink',
+  'new-arrivals': 'for-kink',
 };
 
 function buildAudienceSlugLookup(): Record<string, string> {

@@ -87,10 +87,11 @@ export async function fetchCategoryProductsPage({
     config.handleCandidates,
     config.titleCandidates
   );
+  const collectionHandle = resolved?.handle ?? config.handleCandidates[0];
 
-  if (resolved) {
+  if (collectionHandle) {
     const page = await getCollectionProductsPage({
-      collection: resolved.handle,
+      collection: collectionHandle,
       first,
       after,
       sortKey,

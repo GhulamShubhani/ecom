@@ -33,7 +33,7 @@ export default function ProductCard({ product }: Props) {
             alt={product.name}
             fill
             sizes="(min-width:768px) 25vw, 50vw"
-            className="object-cover transition-transform duration-500 ease-soft group-hover:scale-105"
+            className="object-contain  transition-transform duration-500 ease-soft group-hover:scale-105"
           />
           <span className="absolute top-4 left-4 rounded-full border border-brand-champagne/40 bg-brand-night/70 px-3 py-1.5 font-jakarta text-[10px] font-semibold tracking-[0.24em] text-brand-champagne uppercase backdrop-blur">
             {product.badge}

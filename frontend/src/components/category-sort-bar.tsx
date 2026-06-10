@@ -39,7 +39,7 @@ export default function CategorySortBar({
   };
 
   return (
-    <div className="sticky top-[7.25rem] z-30 border-b border-brand-clay/15 bg-brand-oatmilk/90 backdrop-blur md:top-[7.25rem]">
+    <div className="sticky top-[7.25rem] z-30 border-b border-brand-clay/15 bg-brand-oatmilk/90 backdrop-blur md:top-[4.60rem]">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
         <p className="font-jakarta text-sm text-brand-burgundy/60">
           Showing{" "}

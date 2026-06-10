@@ -23,8 +23,8 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
     links: [
       { label: 'Women', href: '/for-her' },
       { label: 'Men', href: '/for-him' },
-      { label: 'Dresses', href: '/for-couples' },
-      { label: 'New Arrivals', href: '/for-kink' },
+      { label: 'Dresses', href: '/collections/dresses' },
+      { label: 'New Arrivals', href: '/collections/new-arrivals' },
       { label: 'All Products', href: '/search' },
       { label: 'Bestsellers', href: '/collections/bestsellers' },
     ],
